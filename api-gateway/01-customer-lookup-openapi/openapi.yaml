@@ -1,0 +1,80 @@
+swagger: "2.0"
+info:
+  description: >
+    Internal lookup API that returns environment-specific application URLs
+    for a customer account. Fronted by API Gateway; backend is an HTTP
+    Cloud Function.
+  version: "1.0.0"
+  title: Customer Lookup API
+tags:
+  - name: customer
+    description: Customer account lookup
+schemes:
+  - https
+paths:
+  /Customer:
+    get:
+      tags:
+        - customer
+      summary: Find customer by account ID
+      description: Returns a single customer record with per-environment URLs.
+      operationId: customerLookup
+      x-google-backend:
+        # Replace with your Cloud Function / Cloud Run HTTPS URL.
+        # Gateway uses this address when proxying authenticated requests.
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/customer-lookup
+        # Optional: raise deadline for cold starts on Gen1 functions.
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: query
+          description: Numeric customer account identifier
+          required: true
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Customer"
+        "400":
+          description: Invalid account ID provided
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Customer not found
+        "500":
+          description: Backend error
+securityDefinitions:
+  # API Gateway validates the key before the request reaches the backend.
+  # Create the key in API & Services and restrict it to this API / gateway.
+  api_key:
+    type: apiKey
+    name: key
+    in: query
+definitions:
+  Customer:
+    type: object
+    required:
+      - account_id
+    properties:
+      account_id:
+        type: integer
+        format: int64
+        description: Customer account identifier
+      app_prod_url:
+        type: string
+        description: Application URL for the production environment
+      app_stg_url:
+        type: string
+        description: Application URL for the staging environment
+      app_acc_url:
+        type: string
+        description: Application URL for the acceptance environment
+      app_dev_url:
+        type: string
+        description: Application URL for the development environment
