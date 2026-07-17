@@ -17,6 +17,16 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 
 ---
 
+## Patterns
+
+| # | Pattern | Category | Folder |
+|---|---------|----------|--------|
+| 01 | Customer lookup via API Gateway (OpenAPI) | API Gateway | [`api-gateway/01-customer-lookup-openapi/`](./api-gateway/01-customer-lookup-openapi/) |
+
+**Count:** 1 pattern
+
+---
+
 ## Repository structure
 
 ```
@@ -25,14 +35,18 @@ api-integrations/
 ├── api-gateway/             # API Gateway configs and routing patterns
 ├── apigee/                  # Apigee proxy / product / KVM patterns
 ├── api-and-services-keys/   # API key lifecycle and restriction patterns
-└── docs/                    # Architecture and runbooks (non-architecture docs too)
+└── docs/                    # Backlog, runbooks (non-architecture docs)
 ```
 
-Each pattern folder is expected to include:
+Each pattern folder includes:
 
-- `README.md` — use case, design, lessons learned
-- Implementation files (YAML, OpenAPI, Python, etc.)
-- `architecture.md` when a diagram is useful
+- `README.md` — overview, file index, sanitization notes, quick start
+- `BUSINESS_CASE.md` — problem, constraints, tradeoffs
+- `ARCHITECTURE.md` — Mermaid architecture diagram (required)
+- `DATA_FLOW.md` — request path and failure modes
+- Implementation files (YAML, OpenAPI, Python, shell, etc.)
+
+Backlog: [`docs/PATTERN_BACKLOG.md`](./docs/PATTERN_BACKLOG.md)
 
 ---
 
@@ -46,9 +60,3 @@ When documenting changes, use a Field | Value table with:
 - Code / config files created
 - Architecture file created
 - Docs created (excl. architecture)
-
----
-
-## Status
-
-Scaffold only. Patterns will be filled from real GCP work (sanitized).
