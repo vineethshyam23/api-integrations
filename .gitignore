@@ -9,3 +9,5 @@
 SESSION*.md
 PHASE*.md
 PUSH_TO_GITHUB.md
+__pycache__/
+*.py[cod]
