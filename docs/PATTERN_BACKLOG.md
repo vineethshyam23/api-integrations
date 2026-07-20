@@ -8,7 +8,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | ID | Pattern | Folder | Shipped | PR |
 |----|---------|--------|---------|-----|
 | 01 | Customer lookup via API Gateway (OpenAPI) | `api-gateway/01-customer-lookup-openapi/` | 2026-07-17 | https://github.com/vineethshyam23/api-integrations/pull/1 |
-| 02 | HTTP Cloud Function handler behind gateway | `cloud-run-functions/01-http-handler-behind-gateway/` | 2026-07-20 | (pending) |
+| 02 | HTTP Cloud Function handler behind gateway | `cloud-run-functions/01-http-handler-behind-gateway/` | 2026-07-20 | https://github.com/vineethshyam23/api-integrations/pull/2 |
 
 ## Next candidates (not Done)
 
