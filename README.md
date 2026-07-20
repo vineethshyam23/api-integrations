@@ -22,8 +22,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | # | Pattern | Category | Folder |
 |---|---------|----------|--------|
 | 01 | Customer lookup via API Gateway (OpenAPI) | API Gateway | [`api-gateway/01-customer-lookup-openapi/`](./api-gateway/01-customer-lookup-openapi/) |
+| 02 | HTTP handler behind API Gateway | Cloud Run / Cloud Functions | [`cloud-run-functions/01-http-handler-behind-gateway/`](./cloud-run-functions/01-http-handler-behind-gateway/) |
 
-**Count:** 1 pattern
+**Count:** 2 patterns
 
 ---
 
