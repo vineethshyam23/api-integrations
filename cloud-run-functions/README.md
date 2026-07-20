@@ -2,12 +2,17 @@
 
 Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 
-## Planned patterns
+## Patterns
 
-- HTTP Cloud Function / Cloud Run service with structured logging
-- Auth between gateway and backend (IAM / OIDC)
-- Environment separation (dev / prd) without hardcoding project IDs
+| ID | Name | Folder |
+|----|------|--------|
+| 01 | HTTP handler behind API Gateway | [`01-http-handler-behind-gateway/`](./01-http-handler-behind-gateway/) |
 
-## Files
+## Planned
 
-Add sanitized function code and deployment notes here. No API keys in source.
+- Auth between gateway and backend deep-dive (OIDC audience / custom claims)
+- Environment separation (dev / prd) without hardcoding project IDs — covered in part by pattern 01 deploy env
+
+## Rules
+
+Add sanitized function code and deployment notes only. No API keys, OAuth tokens, or live hostnames in source.
