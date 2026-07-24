@@ -52,4 +52,4 @@ curl -sS "https://GATEWAY_HOST/Customer?accountId=12345&key=YOUR_API_KEY"
 
 - Cloud Function HTTP handler behind this gateway → `cloud-run-functions/`
 - API key restriction template → `api-and-services-keys/`
-- Broader multi-route dashboard OpenAPI → later `api-gateway/` entry
+- Broader multi-route dashboard OpenAPI → [`../02-multi-route-dashboard-openapi/`](../02-multi-route-dashboard-openapi/)
