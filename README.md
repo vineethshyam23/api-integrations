@@ -24,8 +24,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 01 | Customer lookup via API Gateway (OpenAPI) | API Gateway | [`api-gateway/01-customer-lookup-openapi/`](./api-gateway/01-customer-lookup-openapi/) |
 | 02 | HTTP handler behind API Gateway | Cloud Run / Cloud Functions | [`cloud-run-functions/01-http-handler-behind-gateway/`](./cloud-run-functions/01-http-handler-behind-gateway/) |
 | 03 | Multi-route dashboard OpenAPI | API Gateway | [`api-gateway/02-multi-route-dashboard-openapi/`](./api-gateway/02-multi-route-dashboard-openapi/) |
+| 04 | GA sessions / daily-visits OpenAPI | API Gateway | [`api-gateway/03-ga-sessions-daily-visits-openapi/`](./api-gateway/03-ga-sessions-daily-visits-openapi/) |
 
-**Count:** 3 patterns
+**Count:** 4 patterns
 
 ---
 

@@ -8,11 +8,11 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 |----|------|--------|
 | 01 | Customer lookup via API Gateway (OpenAPI) | [`01-customer-lookup-openapi/`](./01-customer-lookup-openapi/) |
 | 02 | Multi-route dashboard OpenAPI | [`02-multi-route-dashboard-openapi/`](./02-multi-route-dashboard-openapi/) |
+| 03 | GA sessions / daily-visits OpenAPI (Cloud Run) | [`03-ga-sessions-daily-visits-openapi/`](./03-ga-sessions-daily-visits-openapi/) |
 
 ## Planned
 
 - Dev vs prd gateway config discipline without hardcoded project IDs
-- Analytics multi-route OpenAPI (daily-visits / GA sessions) if still distinct from pattern 03
 
 ## Rules
 
