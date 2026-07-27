@@ -1,0 +1,360 @@
+swagger: "2.0"
+info:
+  description: >
+    Analytics extraction API fronted by Google Cloud API Gateway.
+    Two routes share one hostname and one API key, but point at path
+    suffixes on a Cloud Run service. /daily-visits returns a flat row
+    shape for simple sinks; /ga-sessions-data returns nested session
+    objects (device, geo, traffic, hits) for ETL flattening practice.
+  version: "1.0.0"
+  title: Analytics Sessions API
+tags:
+  - name: analytics-data
+    description: Session and daily-visit extraction APIs
+schemes:
+  - https
+paths:
+  /daily-visits:
+    get:
+      tags:
+        - analytics-data
+      summary: Daily visits (flat rows)
+      description: >
+        Paginated daily visit totals. Prefer this route when the consumer
+        only needs date + count and should not parse nested objects.
+      operationId: getDailyVisits
+      x-google-backend:
+        # Cloud Run service URL + path. Gateway forwards the matched path.
+        address: https://analytics-api-REGION-PROJECT_ID.a.run.app/daily-visits
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-based)
+          required: false
+          type: integer
+          minimum: 1
+          default: 1
+        - name: limit
+          in: query
+          description: Records per page (max 500)
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        - name: start_date
+          in: query
+          description: Start date filter (YYYY-MM-DD)
+          required: false
+          type: string
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        - name: end_date
+          in: query
+          description: End date filter (YYYY-MM-DD)
+          required: false
+          type: string
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/DailyVisitsResponse"
+        "400":
+          description: Invalid parameters
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: No visits found
+        "500":
+          description: Backend error
+
+  /ga-sessions-data:
+    get:
+      tags:
+        - analytics-data
+      summary: GA session rows (nested)
+      description: >
+        Paginated session records with nested device, geo, traffic, and
+        hits_sample. Useful when the contract must mirror warehouse nesting
+        and consumers flatten downstream.
+      operationId: getGaSessionsData
+      x-google-backend:
+        address: https://analytics-api-REGION-PROJECT_ID.a.run.app/ga-sessions-data
+        deadline: 60.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-based)
+          required: false
+          type: integer
+          minimum: 1
+          default: 1
+        - name: limit
+          in: query
+          description: Records per page (max 500)
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        - name: date
+          in: query
+          description: >
+            Partition / table date suffix (YYYYMMDD). Keep as string so
+            clients do not lose leading zeros in some languages.
+          required: false
+          type: string
+          pattern: "^[0-9]{8}$"
+          default: "20170801"
+        - name: country
+          in: query
+          description: Filter by country name
+          required: false
+          type: string
+        - name: device_category
+          in: query
+          description: Filter by device category
+          required: false
+          type: string
+          enum:
+            - desktop
+            - mobile
+            - tablet
+        - name: channel_grouping
+          in: query
+          description: Filter by channel grouping (e.g. Organic Search)
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/GASessionsResponse"
+        "400":
+          description: Invalid parameters
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: No sessions found
+        "500":
+          description: Backend error
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+
+definitions:
+  DailyVisitsResponse:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/DailyVisit"
+      pagination:
+        $ref: "#/definitions/Pagination"
+      filters_applied:
+        $ref: "#/definitions/DateFiltersApplied"
+      metadata:
+        $ref: "#/definitions/Metadata"
+
+  DailyVisit:
+    type: object
+    description: Flat daily visit row — no nesting
+    properties:
+      visit_date:
+        type: string
+        description: Visit date (YYYY-MM-DD)
+      total_visits:
+        type: integer
+        description: Visit count for that date
+
+  DateFiltersApplied:
+    type: object
+    properties:
+      start_date:
+        type: string
+      end_date:
+        type: string
+
+  GASessionsResponse:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/GASession"
+      pagination:
+        $ref: "#/definitions/Pagination"
+      filters_applied:
+        $ref: "#/definitions/FiltersApplied"
+      metadata:
+        $ref: "#/definitions/Metadata"
+
+  GASession:
+    type: object
+    description: Session with nested objects for flattening
+    properties:
+      visitId:
+        type: string
+      visitNumber:
+        type: integer
+      visitStartTime:
+        type: integer
+        format: int64
+        description: Unix timestamp
+      date:
+        type: string
+        description: YYYYMMDD
+      fullVisitorId:
+        type: string
+      channelGrouping:
+        type: string
+      totals:
+        $ref: "#/definitions/SessionTotals"
+      device:
+        $ref: "#/definitions/DeviceInfo"
+      trafficSource:
+        $ref: "#/definitions/TrafficSource"
+      geoNetwork:
+        $ref: "#/definitions/GeoNetwork"
+      customDimensions:
+        type: array
+        items:
+          $ref: "#/definitions/CustomDimension"
+      hits_sample:
+        type: array
+        items:
+          $ref: "#/definitions/HitData"
+
+  SessionTotals:
+    type: object
+    properties:
+      visits:
+        type: integer
+      hits:
+        type: integer
+      pageviews:
+        type: integer
+      bounces:
+        type: integer
+      newVisits:
+        type: integer
+
+  DeviceInfo:
+    type: object
+    properties:
+      browser:
+        type: string
+      operatingSystem:
+        type: string
+      isMobile:
+        type: boolean
+
+  TrafficSource:
+    type: object
+    properties:
+      referralPath:
+        type: string
+      source:
+        type: string
+      medium:
+        type: string
+      keyword:
+        type: string
+      adContent:
+        type: string
+
+  GeoNetwork:
+    type: object
+    properties:
+      continent:
+        type: string
+      country:
+        type: string
+      region:
+        type: string
+      city:
+        type: string
+      metro:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+
+  CustomDimension:
+    type: object
+    properties:
+      index:
+        type: integer
+      value:
+        type: string
+
+  HitData:
+    type: object
+    properties:
+      hitNumber:
+        type: integer
+      time:
+        type: integer
+        description: Offset from session start
+      type:
+        type: string
+        description: PAGE, EVENT, etc.
+      isInteraction:
+        type: boolean
+      pagePath:
+        type: string
+      pageTitle:
+        type: string
+      hostname:
+        type: string
+
+  Pagination:
+    type: object
+    properties:
+      page:
+        type: integer
+      limit:
+        type: integer
+      total_records:
+        type: integer
+      total_pages:
+        type: integer
+      has_next:
+        type: boolean
+      has_previous:
+        type: boolean
+
+  FiltersApplied:
+    type: object
+    properties:
+      country:
+        type: string
+      device_category:
+        type: string
+      channel_grouping:
+        type: string
+
+  Metadata:
+    type: object
+    properties:
+      records_returned:
+        type: integer
+      api_version:
+        type: string
+      dataset:
+        type: string
+        description: Source dataset label (placeholder in examples)

@@ -65,5 +65,6 @@ curl -sS "https://GATEWAY_HOST/v1/getVisits?establishmentId=EST-123&limit=20" \
 ## Related patterns
 
 - Single-route customer lookup → [`../01-customer-lookup-openapi/`](../01-customer-lookup-openapi/)
+- GA sessions / daily-visits OpenAPI (Cloud Run) → [`../03-ga-sessions-daily-visits-openapi/`](../03-ga-sessions-daily-visits-openapi/)
 - HTTP handler behind gateway → [`../../cloud-run-functions/01-http-handler-behind-gateway/`](../../cloud-run-functions/01-http-handler-behind-gateway/)
 - API key restriction template → `api-and-services-keys/` (planned)
