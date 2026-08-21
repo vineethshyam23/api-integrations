@@ -1,0 +1,64 @@
+# Example restriction policy for an API Gateway–facing API key.
+# Not a Google API schema — checklist you can copy into runbooks / PRs.
+# Replace all placeholders. Never put real key strings in this file.
+
+key:
+  display_name: analytics-sessions-prod
+  project_id: PROJECT_ID
+  purpose: "API Gateway edge auth for analytics extract routes"
+  environments:
+    - prod
+
+api_restrictions:
+  mode: restrict_to_apis
+  # From: gcloud api-gateway apis describe API_ID --format='value(managedService)'
+  allowed_services:
+    - API_TARGET_SERVICE.apigateway.PROJECT_ID.cloud.goog
+  # Explicitly reject the default "don't restrict key" setting
+  disallow_unrestricted: true
+
+application_restrictions:
+  # Pick one mode per key. Do not combine conflicting modes casually.
+  mode: ip  # ip | http_referrers | none
+  ip:
+    # Fixed ETL / office egress only
+    allowed_cidrs:
+      - "203.0.113.10/32"   # EXAMPLE — replace
+  http_referrers:
+    # Browser dashboards only; spoofable — pair with API restrictions
+    allowed_referrers:
+      - "https://dashboard.example.com/*"
+  none:
+    rationale: "Server client without stable egress; compensate with secret store + short rotation"
+
+delivery:
+  preferred: header
+  header_name: X-API-Key
+  # Query param form is supported by some OpenAPI specs (key=) — avoid in new work
+  query_param_discouraged: key
+
+rotation:
+  strategy: dual_key_cutover
+  steps:
+    - create_new_restricted_key
+    - update_clients_secret_store
+    - verify_gateway_200_with_new_key
+    - delete_old_key
+    - confirm_old_key_403
+  max_overlap_hours: 24
+
+storage:
+  allowed:
+    - Secret Manager
+    - CI secret store
+    - Partner vault
+  forbidden:
+    - git
+    - OpenAPI YAML
+    - Confluence / tickets
+    - container env committed to source
+
+related_gateway_patterns:
+  - api-gateway/01-customer-lookup-openapi
+  - api-gateway/02-multi-route-dashboard-openapi
+  - api-gateway/03-ga-sessions-daily-visits-openapi
