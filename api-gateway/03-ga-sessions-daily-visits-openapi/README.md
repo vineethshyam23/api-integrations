@@ -63,4 +63,4 @@ curl -sS "https://GATEWAY_HOST/ga-sessions-data?page=1&limit=20&date=20170801&de
 - Multi-route dashboard OpenAPI → [`../02-multi-route-dashboard-openapi/`](../02-multi-route-dashboard-openapi/)
 - HTTP handler behind gateway → [`../../cloud-run-functions/01-http-handler-behind-gateway/`](../../cloud-run-functions/01-http-handler-behind-gateway/)
 - Apigee proxy / KVM → `apigee/` (planned)
-- API key restriction template → `api-and-services-keys/` (planned)
+- Restricted API key → [`../../api-and-services-keys/01-restricted-api-key/`](../../api-and-services-keys/01-restricted-api-key/)

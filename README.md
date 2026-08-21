@@ -25,8 +25,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 02 | HTTP handler behind API Gateway | Cloud Run / Cloud Functions | [`cloud-run-functions/01-http-handler-behind-gateway/`](./cloud-run-functions/01-http-handler-behind-gateway/) |
 | 03 | Multi-route dashboard OpenAPI | API Gateway | [`api-gateway/02-multi-route-dashboard-openapi/`](./api-gateway/02-multi-route-dashboard-openapi/) |
 | 04 | GA sessions / daily-visits OpenAPI | API Gateway | [`api-gateway/03-ga-sessions-daily-visits-openapi/`](./api-gateway/03-ga-sessions-daily-visits-openapi/) |
+| 05 | Restricted API key (API & Services) | API & Services keys | [`api-and-services-keys/01-restricted-api-key/`](./api-and-services-keys/01-restricted-api-key/) |
 
-**Count:** 4 patterns
+**Count:** 5 patterns
 
 ---
 
