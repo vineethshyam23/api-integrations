@@ -7,11 +7,13 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 | ID | Name | Folder |
 |----|------|--------|
 | 01 | HTTP handler behind API Gateway | [`01-http-handler-behind-gateway/`](./01-http-handler-behind-gateway/) |
+| 02 | Vendor API key auth handler | [`02-vendor-api-key-auth-handler/`](./02-vendor-api-key-auth-handler/) |
 
 ## Planned
 
 - Auth between gateway and backend deep-dive (OIDC audience / custom claims)
-- Environment separation (dev / prd) without hardcoding project IDs — covered in part by pattern 01 deploy env
+- Outbound vendor HTTP client (pull) — only from a real source client under `prd/`
+- Environment separation (dev / prd) without hardcoding project IDs — covered in part by pattern 01 / 02 deploy env
 
 ## Rules
 
