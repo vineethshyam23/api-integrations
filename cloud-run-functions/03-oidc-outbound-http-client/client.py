@@ -185,10 +185,8 @@ def save_csv(records: List[Dict[str, Any]], filename: str) -> None:
     if not records:
         logger.warning("no records to save path=%s", filename)
         return
-    try:
-        import pandas as pd
-    except ImportError as exc:
-        raise RuntimeError("pandas is required for CSV export") from exc
+    if not _HAS_PANDAS or pd is None:
+        raise RuntimeError("pandas is required for CSV export")
 
     pd.DataFrame(records).to_csv(filename, index=False)
     logger.info("saved_csv count=%s path=%s", len(records), filename)
