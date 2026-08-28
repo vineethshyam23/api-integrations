@@ -27,8 +27,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 04 | GA sessions / daily-visits OpenAPI | API Gateway | [`api-gateway/03-ga-sessions-daily-visits-openapi/`](./api-gateway/03-ga-sessions-daily-visits-openapi/) |
 | 05 | Restricted API key (API & Services) | API & Services keys | [`api-and-services-keys/01-restricted-api-key/`](./api-and-services-keys/01-restricted-api-key/) |
 | 06 | Vendor API key auth handler | Cloud Run / Cloud Functions | [`cloud-run-functions/02-vendor-api-key-auth-handler/`](./cloud-run-functions/02-vendor-api-key-auth-handler/) |
+| 07 | OIDC outbound HTTP client (paginated pull) | Cloud Run / Cloud Functions | [`cloud-run-functions/03-oidc-outbound-http-client/`](./cloud-run-functions/03-oidc-outbound-http-client/) |
 
-**Count:** 6 patterns
+**Count:** 7 patterns
 
 ---
 
