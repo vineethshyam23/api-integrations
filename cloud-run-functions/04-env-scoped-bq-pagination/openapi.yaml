@@ -1,0 +1,125 @@
+swagger: "2.0"
+info:
+  title: Market potential extract API
+  description: >
+    Paginated warehouse extract filtered by country. Fronted by API Gateway;
+    backend is an HTTP Cloud Function / Cloud Run service that selects the
+    BigQuery table from DEPLOY_ENV (or an explicit table override).
+  version: "1.0.0"
+schemes:
+  - https
+tags:
+  - name: market-potential
+    description: Country-scoped market potential rows
+paths:
+  /getMarketPotentialData:
+    get:
+      tags:
+        - market-potential
+      summary: Retrieve paginated market potential data
+      description: >
+        Returns records + pagination envelope for one ISO country code.
+        Backend accepts countryCode or country_code.
+      operationId: getMarketPotentialData
+      x-google-backend:
+        # Cloud Run / Gen2 URI including the path leaf.
+        address: https://BACKEND_URL/getMarketPotentialData
+        protocol: h2
+        deadline: 60.0
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - name: countryCode
+          in: query
+          description: >
+            ISO 3166-1 alpha-2. Allowed: DE, FR, ES, IT.
+            Alias country_code is also accepted by the backend.
+          required: true
+          type: string
+          enum: [DE, FR, ES, IT]
+        - name: pageSize
+          in: query
+          description: Records per page (max 10000)
+          required: false
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 10000
+        - name: pageNumber
+          in: query
+          description: Page number (starts at 1)
+          required: false
+          type: integer
+          default: 1
+          minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/PaginatedDataResponse"
+        "400":
+          description: Bad request — invalid parameter value
+        "401":
+          description: Unauthorized — authentication missing or invalid
+        "403":
+          description: Forbidden — insufficient permissions / edge key
+        "404":
+          description: Not found — no data for page / country
+        "405":
+          description: Method not allowed
+        "500":
+          description: Internal server error
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-KEY
+    in: header
+    description: Edge API key. Prefer API & Services restrictions; never commit real values.
+definitions:
+  PaginatedDataResponse:
+    type: object
+    required:
+      - records
+      - pagination
+    properties:
+      records:
+        type: array
+        description: Array of data records
+        items:
+          type: object
+          additionalProperties: true
+      pagination:
+        type: object
+        required:
+          - total
+          - pageSize
+          - pageNumber
+          - totalPages
+        properties:
+          total:
+            type: integer
+            description: Total number of records for the country filter
+          pageSize:
+            type: integer
+          pageNumber:
+            type: integer
+          totalPages:
+            type: integer
+  ErrorResponse:
+    type: object
+    required:
+      - error
+      - description
+    properties:
+      error:
+        type: integer
+      description:
+        type: string
+      detail:
+        type: string
+        description: Present only when EXPOSE_ERROR_DETAIL is enabled (dev)
+      exceptionType:
+        type: string
+        description: Present only when EXPOSE_ERROR_DETAIL is enabled (dev)
