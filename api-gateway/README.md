@@ -9,6 +9,7 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 01 | Customer lookup via API Gateway (OpenAPI) | [`01-customer-lookup-openapi/`](./01-customer-lookup-openapi/) |
 | 02 | Multi-route dashboard OpenAPI | [`02-multi-route-dashboard-openapi/`](./02-multi-route-dashboard-openapi/) |
 | 03 | GA sessions / daily-visits OpenAPI (Cloud Run) | [`03-ga-sessions-daily-visits-openapi/`](./03-ga-sessions-daily-visits-openapi/) |
+| 04 | Multi-filter tickets OpenAPI (paired metro+store) | [`04-multi-filter-tickets-openapi/`](./04-multi-filter-tickets-openapi/) |
 
 ## Planned
 
