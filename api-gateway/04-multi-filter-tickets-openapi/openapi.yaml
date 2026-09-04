@@ -1,0 +1,150 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Helpdesk Tickets Lookup API
+  description: >
+    Gateway-fronted ticket lookup for a single-country helpdesk extract.
+    Callers filter by establishment, a paired metro+store identity, or a
+    metro account identifier. Backend is Cloud Run; auth is an API key at
+    the edge (X-API-Key header).
+tags:
+  - name: tickets
+    description: Helpdesk ticket lookup
+schemes:
+  - https
+paths:
+  /tickets:
+    get:
+      tags:
+        - tickets
+      summary: Find helpdesk tickets with optional filters
+      description: >
+        Returns helpdesk tickets for one configured country scope.
+        Filter by establishmentId, by metroId+storeId together, or by
+        metroAccountIdentifier. metroId and storeId are a pair — supplying
+        only one is a 400 from the backend (OpenAPI cannot express that
+        mutual requirement alone).
+      operationId: listTickets
+      x-google-backend:
+        # Replace with your Cloud Run HTTPS URL (service root or path).
+        address: https://tickets-api-REGION-PROJECT_ID.a.run.app
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment ID to filter tickets
+          required: false
+          type: string
+        - name: metroId
+          in: query
+          description: Metro ID (must be used together with storeId)
+          required: false
+          type: string
+        - name: storeId
+          in: query
+          description: Store ID (must be used together with metroId)
+          required: false
+          type: string
+        - name: metroAccountIdentifier
+          in: query
+          description: Metro account identifier to filter tickets
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: Number of items to skip before collecting results
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/TicketsResponse"
+        "400":
+          description: Invalid or incomplete filter combination
+        "403":
+          description: Missing or invalid API key, or method not allowed
+        "404":
+          description: No tickets found for the given filters
+        "500":
+          description: Backend error
+securityDefinitions:
+  # Gateway validates the key before the request reaches Cloud Run.
+  # Create the key in API & Services and restrict it to this API / gateway.
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+definitions:
+  TicketsResponse:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/Ticket"
+      count:
+        type: integer
+        description: Number of records returned in this page
+  Ticket:
+    type: object
+    properties:
+      ticket_number:
+        type: string
+        description: Unique helpdesk ticket identifier
+      ticket_name:
+        type: string
+        description: Ticket title
+      create_date:
+        type: string
+        format: date-time
+        description: When the ticket was created
+      ticket_type:
+        type: string
+        description: Ticket category
+      ticket_tag:
+        type: string
+        description: Tags for categorization
+      close_date:
+        type: string
+        format: date-time
+        description: When the ticket was closed (if closed)
+      country:
+        type: string
+        description: Country scope for this extract
+      escalated_check:
+        type: string
+        description: Whether the ticket was escalated
+      current_status:
+        type: string
+        description: Current ticket status
+      ticket_medium:
+        type: string
+        description: Intake medium (email, phone, etc.)
+      metro_account_identifier:
+        type: string
+        description: Metro account associated with the ticket
+      metro_id:
+        type: string
+        description: Metro identifier
+      store_id:
+        type: integer
+        format: int64
+        description: Store identifier
+      establishment_id:
+        type: string
+        description: Establishment identifier

@@ -29,8 +29,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 06 | Vendor API key auth handler | Cloud Run / Cloud Functions | [`cloud-run-functions/02-vendor-api-key-auth-handler/`](./cloud-run-functions/02-vendor-api-key-auth-handler/) |
 | 07 | OIDC outbound HTTP client (paginated pull) | Cloud Run / Cloud Functions | [`cloud-run-functions/03-oidc-outbound-http-client/`](./cloud-run-functions/03-oidc-outbound-http-client/) |
 | 08 | Env-scoped BigQuery pagination (DEPLOY_ENV) | Cloud Run / Cloud Functions | [`cloud-run-functions/04-env-scoped-bq-pagination/`](./cloud-run-functions/04-env-scoped-bq-pagination/) |
+| 09 | Multi-filter tickets OpenAPI (paired metro+store) | API Gateway | [`api-gateway/04-multi-filter-tickets-openapi/`](./api-gateway/04-multi-filter-tickets-openapi/) |
 
-**Count:** 8 patterns
+**Count:** 9 patterns
 
 ---
 
