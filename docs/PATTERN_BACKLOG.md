@@ -15,7 +15,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 06 | Vendor API key auth handler (hmac.compare_digest) | `cloud-run-functions/02-vendor-api-key-auth-handler/` | 2026-08-24 | https://github.com/vineethshyam23/api-integrations/pull/6 |
 | 07 | OIDC outbound HTTP client (paginated pull) | `cloud-run-functions/03-oidc-outbound-http-client/` | 2026-08-28 | https://github.com/vineethshyam23/api-integrations/pull/7 |
 | 08 | Env-scoped BigQuery pagination handler (DEPLOY_ENV) | `cloud-run-functions/04-env-scoped-bq-pagination/` | 2026-08-31 | https://github.com/vineethshyam23/api-integrations/pull/8 |
-| 09 | Multi-filter tickets OpenAPI (paired metro+store) | `api-gateway/04-multi-filter-tickets-openapi/` | 2026-09-04 | (PR pending) |
+| 09 | Multi-filter tickets OpenAPI (paired metro+store) | `api-gateway/04-multi-filter-tickets-openapi/` | 2026-09-04 | https://github.com/vineethshyam23/api-integrations/pull/9 |
 
 ## Next candidates (not Done)
 
