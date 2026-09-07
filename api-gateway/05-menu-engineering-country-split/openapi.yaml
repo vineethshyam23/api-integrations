@@ -1,0 +1,136 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Menu Engineering POS Lookup API
+  description: >
+    Gateway-fronted POS sold-items lookup for menu engineering.
+    One path, required establishment id, optional date window and paging.
+    Country is an enum query param — the backend picks a country-scoped
+    warehouse table. Auth is an API key at the edge (X-API-Key header).
+tags:
+  - name: menu-engineering
+    description: Menu engineering POS item lookup
+schemes:
+  - https
+paths:
+  /menu-pos:
+    get:
+      tags:
+        - menu-engineering
+      summary: Find POS sold items by establishment
+      description: >
+        Returns sold menu items for one establishment. Pass country=de|fr
+        (default de) so the backend selects the matching country table.
+        Dates are ISO YYYY-MM-DD. Offset/limit page the result set.
+      operationId: listMenuPosItems
+      x-google-backend:
+        # Replace with your HTTP Cloud Function / Cloud Run HTTPS URL.
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/menu-engineering-pos
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentUID
+          in: query
+          description: Establishment identifier (required)
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: Inclusive start date (YYYY-MM-DD). Defaults in backend if omitted.
+          required: false
+          type: string
+          pattern: "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        - name: endDate
+          in: query
+          description: Inclusive end date (YYYY-MM-DD). Defaults in backend if omitted.
+          required: false
+          type: string
+          pattern: "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+        - name: country
+          in: query
+          description: Country code selecting the warehouse table (de or fr). Defaults to de.
+          required: false
+          type: string
+          enum:
+            - de
+            - fr
+          default: de
+        - name: offset
+          in: query
+          description: Number of items to skip before collecting results
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/MenuPosResponse"
+        "400":
+          description: Invalid parameters (country, dates, paging, missing establishment)
+        "403":
+          description: Missing or invalid API key, or method not allowed
+        "404":
+          description: No items found for the given establishment / window
+        "500":
+          description: Backend error
+securityDefinitions:
+  # Gateway validates the key before the request reaches the function.
+  # Create the key in API & Services and restrict it to this API / gateway.
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+definitions:
+  MenuPosResponse:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/MenuPosItem"
+      count:
+        type: integer
+        description: Number of records returned in this page
+  MenuPosItem:
+    type: object
+    properties:
+      order_id:
+        type: integer
+        format: int64
+        description: Order / line grouping identifier
+      item_id:
+        type: integer
+        format: int64
+        description: Menu item identifier
+      item_name:
+        type: string
+        description: Menu item name
+      quantity:
+        type: number
+        description: Quantity sold
+      item_price:
+        type: number
+        description: Unit price
+      tax_rate:
+        type: number
+        description: VAT / tax rate percentage
+      timestamp:
+        type: string
+        description: Item creation timestamp
+      invoice_id:
+        type: integer
+        format: int64
+        description: Receipt / invoice number

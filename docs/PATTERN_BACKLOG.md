@@ -16,15 +16,16 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 07 | OIDC outbound HTTP client (paginated pull) | `cloud-run-functions/03-oidc-outbound-http-client/` | 2026-08-28 | https://github.com/vineethshyam23/api-integrations/pull/7 |
 | 08 | Env-scoped BigQuery pagination handler (DEPLOY_ENV) | `cloud-run-functions/04-env-scoped-bq-pagination/` | 2026-08-31 | https://github.com/vineethshyam23/api-integrations/pull/8 |
 | 09 | Multi-filter tickets OpenAPI (paired metro+store) | `api-gateway/04-multi-filter-tickets-openapi/` | 2026-09-04 | https://github.com/vineethshyam23/api-integrations/pull/9 |
+| 10 | Menu-engineering country-split OpenAPI | `api-gateway/05-menu-engineering-country-split/` | 2026-09-07 | (PR pending) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | Menu-engineering country-split OpenAPI / handler | `api-gateway/05-...` or `cloud-run-functions/05-...` | `prd/dish-menu-engineering-pos.yml` + `.py` — only if distinct from 03/09 filter shapes |
-| 3 | Gateway OpenAPI + app-layer key passthrough deep-dive | `api-gateway/05-...` | Only if distinct from patterns 01–04 / 06 companion OpenAPI |
-| 4 | Outbound client variants (custom audience / workload identity notes) | `cloud-run-functions/05-...` | Only if a distinct source artifact appears — do not invent |
+| 2 | Gateway OpenAPI + app-layer key passthrough deep-dive | `api-gateway/06-...` | Only if distinct from patterns 01–04 / 06 companion OpenAPI — Medallia companion YAML may still be thin |
+| 3 | Outbound client variants (custom audience / workload identity notes) | `cloud-run-functions/05-...` | Only if a distinct source artifact appears — do not invent |
+| 4 | Dev vs prd gateway config discipline (same paths, different backends) | `api-gateway/06-...` | From paired `dev/` + `prd/` YAML twins already in `cloud_functions` — only if teaching value is clear vs existing deploy notes |
 
 ## Out of scope here
 
@@ -43,3 +44,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-08-28: shipped OIDC outbound paginated pull client from `prd/extract_tourism_data.py`. Maileon / tourismnrw_api.py remain BQ-backed inbound handlers (not outbound). Only `extract_tourism_data.py` used `requests` + identity token under `cloud_functions`.
 - 2026-08-31: shipped env-scoped BQ pagination handler from `prd/pos_potential_sam_api_integrated.py` (+ companion OpenAPI). Focus: `DEPLOY_ENV` table defaults, optional full-table override, country allowlist, gated `EXPOSE_ERROR_DETAIL`. Skipped Medallia companion OpenAPI deep-dive (already covered lightly in pattern 06). Next: Apigee if notes appear; else odoo multi-filter gateway OpenAPI.
 - 2026-09-04: shipped multi-filter tickets OpenAPI + parameterized handler from `prd/odoo-tickets-mde.yml` + `.py`. Focus: paired metroId+storeId, offset/limit, Cloud Run backend, f-string SQL removed. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else menu-engineering country-split if distinct.
+- 2026-09-07: shipped menu-engineering country-split OpenAPI + handler from `prd/dish-menu-engineering-pos.yml` + `.py`. Focus: country enum → env table map, ISO dates, parameterized BQ, SQL OFFSET. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else dev/prd gateway twin discipline or a distinct remaining artifact.
