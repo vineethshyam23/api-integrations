@@ -30,8 +30,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 07 | OIDC outbound HTTP client (paginated pull) | Cloud Run / Cloud Functions | [`cloud-run-functions/03-oidc-outbound-http-client/`](./cloud-run-functions/03-oidc-outbound-http-client/) |
 | 08 | Env-scoped BigQuery pagination (DEPLOY_ENV) | Cloud Run / Cloud Functions | [`cloud-run-functions/04-env-scoped-bq-pagination/`](./cloud-run-functions/04-env-scoped-bq-pagination/) |
 | 09 | Multi-filter tickets OpenAPI (paired metro+store) | API Gateway | [`api-gateway/04-multi-filter-tickets-openapi/`](./api-gateway/04-multi-filter-tickets-openapi/) |
+| 10 | Menu-engineering country-split OpenAPI | API Gateway | [`api-gateway/05-menu-engineering-country-split/`](./api-gateway/05-menu-engineering-country-split/) |
 
-**Count:** 9 patterns
+**Count:** 10 patterns
 
 ---
 
