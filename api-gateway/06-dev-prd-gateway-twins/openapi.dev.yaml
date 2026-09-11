@@ -1,0 +1,110 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Account Activities API (DEV)
+  description: >
+    Lead / account activity lookup for a single account identifier.
+    Development gateway config — pairs with openapi.prd.yaml. Same public
+    contract; different backend address. Do not drop path-level security
+    "for convenience" in DEV — clients and keys should exercise the same
+    auth path they will hit in PRD.
+schemes:
+  - https
+tags:
+  - name: activities
+    description: Account activity records
+paths:
+  /getActivities:
+    get:
+      tags:
+        - activities
+      summary: List activities for an account
+      description: Returns activity rows for a single account identifier.
+      operationId: getActivities
+      x-google-backend:
+        # Dev project / function URL (placeholder). Naming often drifts
+        # (e.g. …-lookup vs …-lookup-gbq) — keep intentional and documented.
+        address: https://REGION-PROJECT_ID_DEV.cloudfunctions.net/account-activities-lookup
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: query
+          description: Account identifier used to filter activities
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Activity"
+        "400":
+          description: Invalid account identifier
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Account not found
+        "500":
+          description: Backend error
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+definitions:
+  Activity:
+    type: object
+    properties:
+      subject:
+        type: string
+        description: Activity subject
+      assigned_id:
+        type: string
+        description: Assignee identifier
+      description:
+        type: string
+        description: Free-text description
+      type:
+        type: string
+        description: Activity type
+      created_date:
+        type: string
+        format: date-time
+        description: Created timestamp
+      sub_type:
+        type: string
+        description: Activity sub-type
+      event_topic:
+        type: string
+        description: Event topic
+      is_closed:
+        type: boolean
+        description: Whether the activity is closed
+      name_id:
+        type: string
+        description: Related name / contact id
+      outcome:
+        type: string
+        description: Outcome label
+      start_date:
+        type: string
+        format: date-time
+        description: Start timestamp
+      lead_account_id:
+        type: string
+        description: Lead account identifier
+      account_identifier:
+        type: string
+        description: Canonical account identifier
+      user_id:
+        type: string
+        description: Acting user id
+      profile_name:
+        type: string
+        description: Profile / role name
+      won_status:
+        type: string
+        description: Won / lost status when applicable

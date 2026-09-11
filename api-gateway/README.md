@@ -11,10 +11,12 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 03 | GA sessions / daily-visits OpenAPI (Cloud Run) | [`03-ga-sessions-daily-visits-openapi/`](./03-ga-sessions-daily-visits-openapi/) |
 | 04 | Multi-filter tickets OpenAPI (paired metro+store) | [`04-multi-filter-tickets-openapi/`](./04-multi-filter-tickets-openapi/) |
 | 05 | Menu-engineering country-split OpenAPI | [`05-menu-engineering-country-split/`](./05-menu-engineering-country-split/) |
+| 06 | Dev vs prd API Gateway twins | [`06-dev-prd-gateway-twins/`](./06-dev-prd-gateway-twins/) |
 
 ## Planned
 
-- Dev vs prd gateway config discipline without hardcoded project IDs
+- Multi-table marketing-trigger OpenAPI (Maileon-style) if still unused
+- Apigee proxy / product / KVM when notes exist
 
 ## Rules
 
