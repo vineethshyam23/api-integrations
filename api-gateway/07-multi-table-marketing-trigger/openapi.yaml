@@ -1,0 +1,323 @@
+swagger: "2.0"
+info:
+  title: Marketing trigger extracts (multi-table)
+  description: >-
+    API Gateway front door for paginated marketing-trigger extracts.
+    Each path maps to a different BigQuery table behind one Cloud Run service.
+    Includes a fields-metadata endpoint for source→destination field maps.
+  version: "1.0.0"
+
+schemes:
+  - https
+
+paths:
+  /triggers/contacts:
+    get:
+      tags:
+        - Contacts
+      summary: Paginated contacts trigger extract
+      operationId: getContactsData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/contacts
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of contact trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/payments:
+    get:
+      tags:
+        - Payments
+      summary: Paginated payments trigger extract
+      operationId: getPaymentsData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/payments
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of payments trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/network-pay:
+    get:
+      tags:
+        - NetworkPay
+      summary: Paginated network-pay trigger extract
+      operationId: getNetworkPayData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/network-pay
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of network-pay trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/pos:
+    get:
+      tags:
+        - POS
+      summary: Paginated POS trigger extract
+      operationId: getPosData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/pos
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of POS trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/reservations:
+    get:
+      tags:
+        - Reservations
+      summary: Paginated reservations trigger extract
+      operationId: getReservationsData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/reservations
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of reservations trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/website:
+    get:
+      tags:
+        - Website
+      summary: Paginated website-builder trigger extract
+      operationId: getWebsiteData
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/website
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/pageNumber"
+      responses:
+        "200":
+          description: Page of website trigger rows
+          schema:
+            $ref: "#/definitions/TriggerPageResponse"
+        "400":
+          description: Invalid pageSize or pageNumber
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: Empty page / no rows
+        "500":
+          description: Backend or warehouse error
+
+  /triggers/fields-metadata:
+    get:
+      tags:
+        - Metadata
+      summary: Source-to-destination field mapping metadata
+      description: >-
+        No query parameters. Returns one JSON object keyed by source model name;
+        each value is an array of {src_field, dest_field, data_type}.
+      operationId: getFieldsMetadata
+      x-google-backend:
+        address: https://BACKEND_URL/triggers/fields-metadata
+        protocol: h2
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Model-keyed field map
+          schema:
+            $ref: "#/definitions/FieldMetadataBlock"
+        "401":
+          description: Missing or invalid API key
+        "403":
+          description: Forbidden
+        "404":
+          description: No mapping rows
+        "405":
+          description: Method not allowed
+        "500":
+          description: Backend or warehouse error
+
+parameters:
+  pageSize:
+    name: pageSize
+    in: query
+    description: Records per page (max 10000)
+    required: false
+    type: integer
+    default: 100
+    minimum: 1
+    maximum: 10000
+  pageNumber:
+    name: pageNumber
+    in: query
+    description: Page number (1-based)
+    required: false
+    type: integer
+    default: 1
+    minimum: 1
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-KEY
+    in: header
+    description: API key in the X-API-KEY header
+
+definitions:
+  TriggerPageResponse:
+    type: object
+    required:
+      - records
+      - pagination
+    properties:
+      records:
+        type: array
+        description: Page of trigger rows (shape varies by path)
+        items:
+          type: object
+          additionalProperties: true
+      pagination:
+        type: object
+        required:
+          - total
+          - pageSize
+          - pageNumber
+          - totalPages
+        properties:
+          total:
+            type: integer
+          pageSize:
+            type: integer
+          pageNumber:
+            type: integer
+          totalPages:
+            type: integer
+
+  FieldMetadataBlock:
+    type: object
+    additionalProperties:
+      type: array
+      items:
+        $ref: "#/definitions/FieldMapping"
+
+  FieldMapping:
+    type: object
+    properties:
+      src_field:
+        type: string
+        description: Source model field name
+      dest_field:
+        type: string
+        description: Destination marketing-platform field name
+      data_type:
+        type: string
+        description: Declared type (string, integer, boolean, date, …)
+
+  ErrorResponse:
+    type: object
+    required:
+      - error
+      - description
+    properties:
+      error:
+        type: integer
+      description:
+        type: string
