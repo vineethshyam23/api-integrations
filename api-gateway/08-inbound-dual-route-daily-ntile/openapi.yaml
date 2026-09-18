@@ -1,0 +1,198 @@
+swagger: "2.0"
+info:
+  title: "Inbound dual-route establishment extract (full + daily NTILE)"
+  description: >-
+    API Gateway OpenAPI for a partner-facing establishment feed. One Cloud Run
+    backend serves a full catalog path and a daily NTILE-bucketed incremental
+    path that soft-returns empty pages on quiet days.
+  version: "1.0.0"
+
+schemes:
+  - "https"
+
+paths:
+  "/establishments":
+    get:
+      tags:
+        - "Establishments"
+      summary: "Full establishment catalog (paginated)"
+      description: >-
+        Returns the full refined establishment snapshot with pageSize/pageNumber
+        pagination. Empty pages return 404.
+      operationId: "getEstablishments"
+      x-google-backend:
+        address: "https://BACKEND_URL/establishments"
+        protocol: "h2"
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          description: "Number of records per page (max 1000)"
+          required: false
+          type: "integer"
+          default: 100
+          minimum: 1
+          maximum: 1000
+        - name: "pageNumber"
+          in: "query"
+          description: "Page number (starts at 1)"
+          required: false
+          type: "integer"
+          default: 1
+          minimum: 1
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/EstablishmentPageResponse"
+        "400":
+          description: "Bad request - invalid pageSize or pageNumber"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden - missing or invalid API key"
+        "404":
+          description: "Not found - empty page or no catalog rows"
+        "500":
+          description: "Internal server error"
+
+  "/establishments/daily":
+    get:
+      tags:
+        - "Establishments"
+      summary: "Daily NTILE slice of establishments"
+      description: >-
+        Returns today's bucket of the daily table using NTILE over establishment_id
+        with day-of-month (minus one) as the bucket selector. When there is no
+        slice (e.g. first calendar day), returns 200 with empty records and a
+        message — not 404 — so partners can poll without treating quiet days as
+        failures.
+      operationId: "getEstablishmentsDaily"
+      x-google-backend:
+        address: "https://BACKEND_URL/establishments/daily"
+        protocol: "h2"
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          description: "Number of records per page (max 1000)"
+          required: false
+          type: "integer"
+          default: 100
+          minimum: 1
+          maximum: 1000
+        - name: "pageNumber"
+          in: "query"
+          description: "Page number (starts at 1)"
+          required: false
+          type: "integer"
+          default: 1
+          minimum: 1
+      responses:
+        "200":
+          description: >-
+            Successful operation — may include empty records with a message when
+            the daily bucket is quiet
+          schema:
+            $ref: "#/definitions/EstablishmentPageResponse"
+        "400":
+          description: "Bad request - invalid pageSize or pageNumber"
+        "401":
+          description: "Unauthorized"
+        "403":
+          description: "Forbidden - missing or invalid API key"
+        "500":
+          description: "Internal server error"
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-KEY
+    in: header
+    description: >-
+      Enter your API key in the X-API-KEY header. Restrict the key to this API
+      in API & Services.
+
+definitions:
+  EstablishmentPageResponse:
+    type: "object"
+    properties:
+      records:
+        type: "array"
+        description: "Establishment rows (may be empty on the daily path)"
+        items:
+          $ref: "#/definitions/Establishment"
+      message:
+        type: "string"
+        description: >-
+          Present on the daily path when the bucket is empty or suppressed
+          (e.g. first-of-month quiet day)
+        example: "No new data got updated"
+      pagination:
+        type: "object"
+        properties:
+          total:
+            type: "integer"
+            description: "Total rows in the selected set"
+          pageSize:
+            type: "integer"
+          pageNumber:
+            type: "integer"
+          totalPages:
+            type: "integer"
+    required:
+      - "records"
+      - "pagination"
+
+  Establishment:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      street:
+        type: "string"
+      city:
+        type: "string"
+      country:
+        type: "string"
+      postal_code:
+        type: "string"
+      formatted_address:
+        type: "string"
+      establishment_id:
+        type: "string"
+        description: "Stable establishment key"
+      places_legacy_id:
+        type: "string"
+        description: "Legacy places id during partner transition (often equals establishment_id)"
+      establishment_type:
+        type: "string"
+      cuisine_type:
+        type: "string"
+      price_category:
+        type: "string"
+      url:
+        type: "string"
+      flag_order:
+        type: "boolean"
+      flag_reservation:
+        type: "boolean"
+      menu_url:
+        type: "string"
+      latitude:
+        type: "number"
+        format: "float"
+      longitude:
+        type: "number"
+        format: "float"
+      opening_hours:
+        type: "string"
+      rating:
+        type: "number"
+        format: "float"

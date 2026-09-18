@@ -33,8 +33,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 10 | Menu-engineering country-split OpenAPI | API Gateway | [`api-gateway/05-menu-engineering-country-split/`](./api-gateway/05-menu-engineering-country-split/) |
 | 11 | Dev vs prd API Gateway twins | API Gateway | [`api-gateway/06-dev-prd-gateway-twins/`](./api-gateway/06-dev-prd-gateway-twins/) |
 | 12 | Multi-table marketing-trigger OpenAPI | API Gateway | [`api-gateway/07-multi-table-marketing-trigger/`](./api-gateway/07-multi-table-marketing-trigger/) |
+| 13 | Inbound dual-route daily NTILE pagination | API Gateway | [`api-gateway/08-inbound-dual-route-daily-ntile/`](./api-gateway/08-inbound-dual-route-daily-ntile/) |
 
-**Count:** 12 patterns
+**Count:** 13 patterns
 
 ---
 

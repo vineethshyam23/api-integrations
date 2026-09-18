@@ -19,14 +19,15 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 10 | Menu-engineering country-split OpenAPI | `api-gateway/05-menu-engineering-country-split/` | 2026-09-07 | https://github.com/vineethshyam23/api-integrations/pull/10 |
 | 11 | Dev vs prd API Gateway twins (contract parity gate) | `api-gateway/06-dev-prd-gateway-twins/` | 2026-09-11 | https://github.com/vineethshyam23/api-integrations/pull/11 |
 | 12 | Multi-table marketing-trigger OpenAPI (shared pagination) | `api-gateway/07-multi-table-marketing-trigger/` | 2026-09-14 | https://github.com/vineethshyam23/api-integrations/pull/12 |
+| 13 | Inbound dual-route daily NTILE pagination | `api-gateway/08-inbound-dual-route-daily-ntile/` | 2026-09-18 | (pending PR) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | Tourism inbound multi-route pagination OpenAPI | `api-gateway/08-...` | `prd/tourismnrw_integrated.yml` + `tourismnrw_api.py` — inbound BQ (not outbound OIDC) |
-| 3 | Gateway OpenAPI + app-layer Bearer/key passthrough deep-dive | `api-gateway/08-...` | Medallia companion YAML (`medalia_integrated.yml` / `medallia.yml`) — only if distinct from pattern 06 |
+| 2 | Gateway OpenAPI + app-layer Bearer/key passthrough deep-dive | `api-gateway/09-...` | Medallia companion YAML (`medalia_integrated.yml` / `medallia.yml`) — only if distinct from pattern 06 |
+| 3 | Remaining unused OpenAPI twin / panel dashboard variant | `api-gateway/09-...` | Only if still unique vs patterns 03 / 11 after review |
 
 ## Out of scope here
 
@@ -48,3 +49,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-09-07: shipped menu-engineering country-split OpenAPI + handler from `prd/dish-menu-engineering-pos.yml` + `.py`. Focus: country enum → env table map, ISO dates, parameterized BQ, SQL OFFSET. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else dev/prd gateway twin discipline or a distinct remaining artifact.
 - 2026-09-11: shipped DEV/PRD gateway twin discipline from `prd/dish-360-dashboard-de.yml` + `dev/dish-360-dashboard-de-dev.yml` (plus security-drop lesson from customer-lookup twins). Focus: paired OpenAPI, `check-twins.sh` contract gate, env-aware deploy. Aligned schema types; kept security on in both twins. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else Maileon multi-table trigger API.
 - 2026-09-14: shipped multi-table marketing-trigger OpenAPI + shared pagination helper from `prd/maileon_api_integrated.yml` + `.py`. Focus: path→table map, shared `fetch_data_with_pagination`, fields-metadata grouping, env table overrides, gated error detail. Paths renamed `/triggers/*`; column lists trimmed. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else tourism inbound multi-route pagination.
+- 2026-09-18: shipped inbound dual-route daily NTILE pagination from `prd/tourismnrw_integrated.yml` + `tourismnrw_api.py`. Focus: full catalog vs daily NTILE bucket, asymmetric empty semantics (404 vs soft 200+message), parameterized BQ, env table ids, PII columns trimmed. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else Medallia companion OpenAPI deep-dive if still distinct from pattern 06.
