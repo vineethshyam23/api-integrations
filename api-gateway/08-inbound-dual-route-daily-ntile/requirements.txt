@@ -1,0 +1,6 @@
+functions-framework==3.*
+flask>=2.0,<4
+google-cloud-bigquery>=3.0,<4
+pandas>=2.0,<3
+numpy>=1.24,<3
+db-dtypes>=1.0,<2
