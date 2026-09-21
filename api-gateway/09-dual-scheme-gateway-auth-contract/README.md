@@ -2,7 +2,7 @@
 
 Google Cloud API Gateway OpenAPI for a **vendor lookup** API where clients send either `X-API-KEY` or `Authorization: Bearer <token>`. The edge contract declares both as alternative `apiKey` schemes so Swagger UI, codegen, and API Gateway stay aligned with an app-layer handler that already accepts either header.
 
-This is the **gateway half** of the Medallia-style vendor integration. The handler (constant-time compare, path routing, BQ) ships as:
+This is the **gateway half** of a vendor CX lookup integration. The handler (constant-time compare, path routing, BQ) ships as:
 
 → [`../../cloud-run-functions/02-vendor-api-key-auth-handler/`](../../cloud-run-functions/02-vendor-api-key-auth-handler/)
 
