@@ -20,7 +20,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 11 | Dev vs prd API Gateway twins (contract parity gate) | `api-gateway/06-dev-prd-gateway-twins/` | 2026-09-11 | https://github.com/vineethshyam23/api-integrations/pull/11 |
 | 12 | Multi-table marketing-trigger OpenAPI (shared pagination) | `api-gateway/07-multi-table-marketing-trigger/` | 2026-09-14 | https://github.com/vineethshyam23/api-integrations/pull/12 |
 | 13 | Inbound dual-route daily NTILE pagination | `api-gateway/08-inbound-dual-route-daily-ntile/` | 2026-09-18 | https://github.com/vineethshyam23/api-integrations/pull/13 |
-| 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | (PR pending) |
+| 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | https://github.com/vineethshyam23/api-integrations/pull/14 |
 
 ## Next candidates (not Done)
 
