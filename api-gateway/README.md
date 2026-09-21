@@ -14,11 +14,12 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 06 | Dev vs prd API Gateway twins | [`06-dev-prd-gateway-twins/`](./06-dev-prd-gateway-twins/) |
 | 07 | Multi-table marketing-trigger OpenAPI | [`07-multi-table-marketing-trigger/`](./07-multi-table-marketing-trigger/) |
 | 08 | Inbound dual-route daily NTILE pagination | [`08-inbound-dual-route-daily-ntile/`](./08-inbound-dual-route-daily-ntile/) |
+| 09 | Dual-scheme gateway auth contract (Bearer + API key) | [`09-dual-scheme-gateway-auth-contract/`](./09-dual-scheme-gateway-auth-contract/) |
 
 ## Planned
 
 - Apigee proxy / product / KVM when notes exist
-- Gateway OpenAPI + app-layer Bearer/key passthrough deep-dive (Medallia companion YAML) if distinct from pattern 06
+- Remaining unused OpenAPI twin / panel dashboard variant — only if still unique vs patterns 03 / 11
 
 ## Rules
 

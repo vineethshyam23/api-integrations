@@ -34,8 +34,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 11 | Dev vs prd API Gateway twins | API Gateway | [`api-gateway/06-dev-prd-gateway-twins/`](./api-gateway/06-dev-prd-gateway-twins/) |
 | 12 | Multi-table marketing-trigger OpenAPI | API Gateway | [`api-gateway/07-multi-table-marketing-trigger/`](./api-gateway/07-multi-table-marketing-trigger/) |
 | 13 | Inbound dual-route daily NTILE pagination | API Gateway | [`api-gateway/08-inbound-dual-route-daily-ntile/`](./api-gateway/08-inbound-dual-route-daily-ntile/) |
+| 14 | Dual-scheme gateway auth contract (Bearer + API key) | API Gateway | [`api-gateway/09-dual-scheme-gateway-auth-contract/`](./api-gateway/09-dual-scheme-gateway-auth-contract/) |
 
-**Count:** 13 patterns
+**Count:** 14 patterns
 
 ---
 

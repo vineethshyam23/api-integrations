@@ -1,0 +1,334 @@
+swagger: "2.0"
+info:
+  title: "Vendor lookup API — dual gateway auth schemes"
+  description: >-
+    API Gateway OpenAPI for a multi-route vendor lookup API fronting one Cloud
+    Run service. Declares both X-API-KEY and Authorization Bearer as alternative
+    apiKey schemes so the edge contract matches an app-layer handler that
+    accepts either header. Pair with the vendor API key auth handler pattern.
+  version: "1.0.0"
+
+schemes:
+  - "https"
+
+paths:
+  "/getUser":
+    get:
+      tags:
+        - "User"
+      summary: "Retrieve users by account_id"
+      description: >-
+        Returns user rows for a single account_id. Edge auth: X-API-KEY or
+        Authorization Bearer (see securityDefinitions). Backend also validates
+        the shared secret.
+      operationId: "getUserByAccountId"
+      x-google-backend:
+        address: "https://BACKEND_URL/getUser"
+        protocol: "h2"
+      security:
+        - ApiKeyHeader: []
+        - BearerToken: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "account_id"
+          in: "query"
+          description: "Account identifier"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/UserEnvelope"
+        "400":
+          description: "Bad request — missing or invalid account_id"
+        "401":
+          description: "Unauthorized — missing or invalid API key / Bearer token"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Not found — no users for account"
+        "500":
+          description: "Internal server error"
+
+  "/getPosUser":
+    get:
+      tags:
+        - "User"
+      summary: "Retrieve POS users by enterprise_id + country_code"
+      description: >-
+        Compound lookup: both enterprise_id and country_code are required.
+        Same dual-scheme edge auth as the other routes.
+      operationId: "getPosUserByEnterpriseIdAndCountry"
+      x-google-backend:
+        address: "https://BACKEND_URL/getPosUser"
+        protocol: "h2"
+      security:
+        - ApiKeyHeader: []
+        - BearerToken: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "enterprise_id"
+          in: "query"
+          description: "Enterprise identifier"
+          required: true
+          type: "string"
+        - name: "country_code"
+          in: "query"
+          description: "ISO 3166-1 alpha-2 country code"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/PosUserEnvelope"
+        "400":
+          description: "Bad request — missing parameters"
+        "401":
+          description: "Unauthorized — missing or invalid API key / Bearer token"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Not found — no POS users"
+        "500":
+          description: "Internal server error"
+
+  "/getEstablishments":
+    get:
+      tags:
+        - "Establishments"
+      summary: "Retrieve establishment by establishment_id"
+      description: >-
+        Returns establishment profile fields for one establishment_id.
+      operationId: "getEstablishmentById"
+      x-google-backend:
+        address: "https://BACKEND_URL/getEstablishments"
+        protocol: "h2"
+      security:
+        - ApiKeyHeader: []
+        - BearerToken: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "establishment_id"
+          in: "query"
+          description: "Establishment identifier"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/EstablishmentEnvelope"
+        "400":
+          description: "Bad request — missing or invalid establishment_id"
+        "401":
+          description: "Unauthorized — missing or invalid API key / Bearer token"
+        "403":
+          description: "Forbidden"
+        "404":
+          description: "Not found — establishment does not exist"
+        "500":
+          description: "Internal server error"
+
+# Two alternative schemes (OR). Do not collapse into one scheme named "Bearer"
+# that secretly maps to X-API-KEY — that breaks Swagger UI hints and client codegen.
+securityDefinitions:
+  ApiKeyHeader:
+    type: "apiKey"
+    name: "X-API-KEY"
+    in: "header"
+    description: >-
+      Shared integration key in the X-API-KEY header. Prefer Secret Manager;
+      never commit real values.
+  BearerToken:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    description: >-
+      Same shared secret sent as `Authorization: Bearer YOUR_API_KEY`. Gateway
+      treats this as an apiKey header scheme; the backend strips the Bearer
+      prefix before constant-time compare.
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      account_id:
+        type: "string"
+        description: "Account identifier"
+        example: "ACCOUNT_ID"
+      establishment_id:
+        type: "string"
+        description: "Linked establishment identifier"
+        example: "ESTABLISHMENT_ID"
+      salutation:
+        type: "string"
+        description: "Optional salutation"
+        example: "Ms"
+        enum: ["Mr", "Ms", "Mrs", "Dr", "Prof"]
+      first_name:
+        type: "string"
+        example: "Ada"
+      last_name:
+        type: "string"
+        example: "Example"
+      email:
+        type: "string"
+        format: "email"
+        example: "user@example.com"
+      mobilephone:
+        type: "string"
+        example: "+490000000000"
+      phone:
+        type: "string"
+        example: "+490000000000"
+      mobile:
+        type: "string"
+        example: "+490000000000"
+
+  UserEnvelope:
+    type: "object"
+    description: >-
+      Envelope keyed by account_id. Shape matches common vendor client
+      expectations (`{ "<id>": [ User, ... ] }`).
+    additionalProperties:
+      type: "array"
+      items:
+        $ref: "#/definitions/User"
+    example:
+      ACCOUNT_ID:
+        - account_id: "ACCOUNT_ID"
+          establishment_id: "ESTABLISHMENT_ID"
+          salutation: "Ms"
+          first_name: "Ada"
+          last_name: "Example"
+          email: "user@example.com"
+          mobilephone: "+490000000000"
+          phone: "+490000000000"
+          mobile: "+490000000000"
+
+  PosUser:
+    type: "object"
+    properties:
+      account_id:
+        type: "string"
+        example: "ACCOUNT_ID"
+      establishment_id:
+        type: "string"
+        example: "ESTABLISHMENT_ID"
+      salutation:
+        type: "string"
+        example: null
+      first_name:
+        type: "string"
+        example: "Ada"
+      last_name:
+        type: "string"
+        example: "Example"
+      email:
+        type: "string"
+        format: "email"
+        example: "pos.user@example.com"
+      mobilephone:
+        type: "string"
+        example: "+490000000000"
+      phone:
+        type: "string"
+        example: "+490000000000"
+      mobile:
+        type: "string"
+        example: "+490000000000"
+
+  PosUserEnvelope:
+    type: "object"
+    description: >-
+      Envelope keyed by `{enterprise_id}_{country_code}` (e.g. `1234_DE`).
+    additionalProperties:
+      type: "array"
+      items:
+        $ref: "#/definitions/PosUser"
+    example:
+      "1234_DE":
+        - account_id: "ACCOUNT_ID"
+          establishment_id: "ESTABLISHMENT_ID"
+          salutation: null
+          first_name: "Ada"
+          last_name: "Example"
+          email: "pos.user@example.com"
+          mobilephone: "+490000000000"
+          phone: "+490000000000"
+          mobile: "+490000000000"
+
+  Establishment:
+    type: "object"
+    properties:
+      account_id:
+        type: "string"
+        example: "ACCOUNT_ID"
+      establishment_name:
+        type: "string"
+        example: "Example Cafe"
+      establishment_registration_date:
+        type: "string"
+        format: "date"
+        example: "2022-01-15"
+      establishment_street:
+        type: "string"
+        example: "Example Street 1"
+      establishment_postalcode:
+        type: "string"
+        example: "10115"
+      establishment_city:
+        type: "string"
+        example: "Example City"
+      establishment_country_code:
+        type: "string"
+        example: "DE"
+      subscription_status:
+        type: "string"
+        example: "Active"
+        enum: ["Active", "Disabled", "Suspended"]
+      subscription_start_date:
+        type: "string"
+        format: "date"
+        example: "2022-01-20"
+      asset_disabled_date:
+        type: "string"
+        format: "date"
+        example: null
+      main_category:
+        type: "string"
+        example: "Restaurant"
+      product_code:
+        type: "string"
+        example: "PRODUCT_CODE"
+      paid_asset:
+        type: "boolean"
+        example: true
+
+  EstablishmentEnvelope:
+    type: "object"
+    description: "Envelope keyed by establishment_id."
+    additionalProperties:
+      type: "array"
+      items:
+        $ref: "#/definitions/Establishment"
+    example:
+      ESTABLISHMENT_ID:
+        - account_id: "ACCOUNT_ID"
+          establishment_name: "Example Cafe"
+          establishment_registration_date: "2022-01-15"
+          establishment_street: "Example Street 1"
+          establishment_postalcode: "10115"
+          establishment_city: "Example City"
+          establishment_country_code: "DE"
+          subscription_status: "Active"
+          subscription_start_date: "2022-01-20"
+          asset_disabled_date: null
+          main_category: "Restaurant"
+          product_code: "PRODUCT_CODE"
+          paid_asset: true
