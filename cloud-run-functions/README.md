@@ -10,12 +10,12 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 | 02 | Vendor API key auth handler | [`02-vendor-api-key-auth-handler/`](./02-vendor-api-key-auth-handler/) |
 | 03 | OIDC outbound HTTP client (paginated pull) | [`03-oidc-outbound-http-client/`](./03-oidc-outbound-http-client/) |
 | 04 | Env-scoped BigQuery pagination (DEPLOY_ENV) | [`04-env-scoped-bq-pagination/`](./04-env-scoped-bq-pagination/) |
+| 05 | POS daily-transactions offset/limit (SQL pushdown) | [`05-pos-daily-transactions-offset-limit/`](./05-pos-daily-transactions-offset-limit/) |
 
 ## Planned
 
-- Auth between gateway and backend deep-dive (OIDC audience / custom claims)
 - Apigee proxy / product / KVM — only when `Documents/API` notes exist (do not invent)
-- Multi-filter tickets OpenAPI (paired query params) — `prd/odoo-tickets-mde.yml` if still unused
+- Remaining unused OpenAPI twin / panel dashboard variant — only if still unique vs gateway patterns 03 / 11
 
 ## Rules
 
