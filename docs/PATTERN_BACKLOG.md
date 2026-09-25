@@ -21,14 +21,15 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 12 | Multi-table marketing-trigger OpenAPI (shared pagination) | `api-gateway/07-multi-table-marketing-trigger/` | 2026-09-14 | https://github.com/vineethshyam23/api-integrations/pull/12 |
 | 13 | Inbound dual-route daily NTILE pagination | `api-gateway/08-inbound-dual-route-daily-ntile/` | 2026-09-18 | https://github.com/vineethshyam23/api-integrations/pull/13 |
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | https://github.com/vineethshyam23/api-integrations/pull/14 |
+| 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | (pending PR) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | POS daily-transactions offset/limit Cloud Function | `cloud-run-functions/05-...` | `prd/dish-panel-pos-gbq-v3.py` — parameterized rewrite of f-string SQL + ENV→BQ_PROJECT_ID; only if distinct from 04/08 paging |
-| 3 | Remaining unused OpenAPI twin / panel dashboard variant | `api-gateway/10-...` | Only if still unique vs patterns 03 / 11 after review |
+| 2 | Remaining unused OpenAPI twin / panel dashboard variant | `api-gateway/10-...` | Only if still unique vs patterns 03 / 11 after review |
+| 3 | Panel dashboard twin discipline (prd vs dev gbq_v2) | `api-gateway/10-...` | `prd/hd-dish-panel-dashboard-gbq_v2.yml` + `dev/...-dev-gbq_v2.yml` — only if still distinct from pattern 11 |
 
 ## Out of scope here
 
@@ -52,3 +53,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-09-14: shipped multi-table marketing-trigger OpenAPI + shared pagination helper from `prd/maileon_api_integrated.yml` + `.py`. Focus: path→table map, shared `fetch_data_with_pagination`, fields-metadata grouping, env table overrides, gated error detail. Paths renamed `/triggers/*`; column lists trimmed. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else tourism inbound multi-route pagination.
 - 2026-09-18: shipped inbound dual-route daily NTILE pagination from `prd/tourismnrw_integrated.yml` + `tourismnrw_api.py`. Focus: full catalog vs daily NTILE bucket, asymmetric empty semantics (404 vs soft 200+message), parameterized BQ, env table ids, PII columns trimmed. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else Medallia companion OpenAPI deep-dive if still distinct from pattern 06.
 - 2026-09-21: shipped Dual-scheme gateway auth contract (Bearer + API key) from `prd/medalia_integrated.yml` (handler already pattern 06). Focus: dual `securityDefinitions` (`ApiKeyHeader` + `BearerToken` OR list), Cloud Run path backends with h2, sanitized full schemas, `check-auth-contract.sh` against the Bearer→X-API-KEY naming pitfall. Distinct from pattern 06 (app-layer compare) and from the thin single-scheme stub in that folder. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else POS daily-transactions offset/limit CF or remaining unique panel twin.
+- 2026-09-25: shipped POS daily-transactions offset/limit CF from `prd/dish-panel-pos-gbq-v3.py` (contrast v2 in-memory slice). Focus: SQL LIMIT/OFFSET pushdown, parameterized `@establishment_id`, `ENV`→`BQ_PROJECT_ID`, hard limit cap, gated error detail, companion `/v3/getPOS` OpenAPI with `{records}` contract. Distinct from pattern 04 (DEPLOY_ENV country paging) and from gateway-only pattern 03/02. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else unused panel twin if still unique vs 03/11.

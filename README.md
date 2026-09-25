@@ -35,8 +35,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 12 | Multi-table marketing-trigger OpenAPI | API Gateway | [`api-gateway/07-multi-table-marketing-trigger/`](./api-gateway/07-multi-table-marketing-trigger/) |
 | 13 | Inbound dual-route daily NTILE pagination | API Gateway | [`api-gateway/08-inbound-dual-route-daily-ntile/`](./api-gateway/08-inbound-dual-route-daily-ntile/) |
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | API Gateway | [`api-gateway/09-dual-scheme-gateway-auth-contract/`](./api-gateway/09-dual-scheme-gateway-auth-contract/) |
+| 15 | POS daily-transactions offset/limit (SQL pushdown) | Cloud Run / Cloud Functions | [`cloud-run-functions/05-pos-daily-transactions-offset-limit/`](./cloud-run-functions/05-pos-daily-transactions-offset-limit/) |
 
-**Count:** 14 patterns
+**Count:** 15 patterns
 
 ---
 
