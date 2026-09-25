@@ -21,7 +21,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 12 | Multi-table marketing-trigger OpenAPI (shared pagination) | `api-gateway/07-multi-table-marketing-trigger/` | 2026-09-14 | https://github.com/vineethshyam23/api-integrations/pull/12 |
 | 13 | Inbound dual-route daily NTILE pagination | `api-gateway/08-inbound-dual-route-daily-ntile/` | 2026-09-18 | https://github.com/vineethshyam23/api-integrations/pull/13 |
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | https://github.com/vineethshyam23/api-integrations/pull/14 |
-| 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | (pending PR) |
+| 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | https://github.com/vineethshyam23/api-integrations/pull/15 |
 
 ## Next candidates (not Done)
 
