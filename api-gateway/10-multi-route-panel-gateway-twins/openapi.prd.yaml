@@ -1,0 +1,462 @@
+swagger: "2.0"
+info:
+  version: "2.1.0"
+  title: Panel Dashboard API (PRD)
+  description: >
+    Multi-route establishment dashboard gateway for production. Pairs with
+    openapi.dev.yaml. Paths, security, and response schemas must stay aligned;
+    only x-google-backend addresses (and env-labelled titles / versions) should
+    differ. This twin surface stops at /v2/getPOS — a later expanded OpenAPI may
+    add /v3/getPOS, but do not add that path to one twin only.
+schemes:
+  - https
+tags:
+  - name: dashboard
+    description: Establishment dashboard data
+paths:
+  /v2/getEstablishment:
+    get:
+      tags:
+        - dashboard
+      summary: Find establishment information by ID
+      description: Returns profile and product flags for a single establishment.
+      operationId: getEstablishment-v2
+      x-google-backend:
+        # PRD: establishment + POS live in REGION_A; visits/orders/reservations in REGION_B.
+        address: https://REGION_A-PROJECT_ID.cloudfunctions.net/panel-establishment-gbq-v2
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Establishment-v2"
+        "400":
+          description: Invalid establishment id
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Establishment not found
+  /v1/getVisits:
+    get:
+      tags:
+        - dashboard
+      summary: List website visits by establishment
+      description: Returns visit rows for an establishment with optional date window.
+      operationId: getVisits
+      x-google-backend:
+        address: https://REGION_B-PROJECT_ID.cloudfunctions.net/panel-visits-gbq
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: Start date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: endDate
+          in: query
+          description: End date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: offset
+          in: query
+          description: Rows to skip
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Max rows to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Visits"
+        "400":
+          description: Invalid establishment id
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Establishment not found
+  /v1/getOrders:
+    get:
+      tags:
+        - dashboard
+      summary: List orders by establishment
+      description: Returns order rows for an establishment with optional date window.
+      operationId: getOrders
+      x-google-backend:
+        address: https://REGION_B-PROJECT_ID.cloudfunctions.net/panel-orders-gbq
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: Start date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: endDate
+          in: query
+          description: End date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: offset
+          in: query
+          description: Rows to skip
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Max rows to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Orders"
+        "400":
+          description: Invalid establishment id
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Establishment not found
+  /v1/getReservations:
+    get:
+      tags:
+        - dashboard
+      summary: List reservations by establishment
+      description: Returns reservation rows for an establishment with optional date window.
+      operationId: getReservations
+      x-google-backend:
+        address: https://REGION_B-PROJECT_ID.cloudfunctions.net/panel-reservations-gbq
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: Start date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: endDate
+          in: query
+          description: End date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: offset
+          in: query
+          description: Rows to skip
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Max rows to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Reservation"
+        "400":
+          description: Invalid establishment id
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Establishment not found
+  /v2/getPOS:
+    get:
+      tags:
+        - dashboard
+      summary: Get POS KPIs for an establishment
+      description: Returns POS KPI rows for a given establishment (v2 shape).
+      operationId: getPOS
+      x-google-backend:
+        address: https://REGION_A-PROJECT_ID.cloudfunctions.net/panel-pos-gbq-v2
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: Start date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: endDate
+          in: query
+          description: End date (DD-MM-YYYY)
+          type: string
+          pattern: "^(3[01]|[12][0-9]|0[1-9])-(1[0-2]|0[1-9])-[0-9]{4}$"
+          required: false
+        - name: offset
+          in: query
+          description: Rows to skip
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Max rows to return
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/POS"
+        "400":
+          description: Invalid establishment id
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: Establishment not found
+securityDefinitions:
+  # Keep name + in identical in openapi.dev.yaml. Dropping path-level security:
+  # while leaving securityDefinitions is a common twin footgun.
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+definitions:
+  Establishment-v2:
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: CRM customer identifier
+      has_website:
+        type: boolean
+        description: Has website product enabled
+      has_reservation:
+        type: boolean
+        description: Has reservation product enabled
+      has_order:
+        type: boolean
+        description: Has order product enabled
+      has_pos:
+        type: boolean
+        description: Has POS product enabled
+      account_id:
+        type: string
+        description: Account identifier
+      flag_display:
+        type: string
+        description: Display flag for UI
+  Orders:
+    type: object
+    properties:
+      account_id:
+        type: string
+        description: Account identifier
+      order_id:
+        type: integer
+        format: int64
+        description: Order identifier
+      order_status:
+        type: string
+        description: Order status
+      order_total:
+        type: integer
+        format: int64
+        description: Order total (minor units or integer currency as returned by backend)
+      order_currency:
+        type: string
+        description: Currency code
+      date_added:
+        type: string
+        format: date
+        description: Date the order was added
+  Reservation:
+    type: object
+    properties:
+      reservation_id:
+        type: integer
+        format: int64
+        description: Reservation identifier
+      account_id:
+        type: string
+        description: Account identifier
+      capacity:
+        type: integer
+        format: int64
+        description: Number of guests
+      origin:
+        type: string
+        description: Reservation origin channel
+      start_date:
+        type: string
+        format: date-time
+        description: Reservation start timestamp
+      status:
+        type: string
+        description: Reservation status
+      day:
+        type: string
+        format: date
+        description: Reservation calendar day
+  Visits:
+    type: object
+    properties:
+      account_id:
+        type: string
+        description: Account identifier
+      visit_date:
+        type: string
+        format: date
+        description: Visit date
+      n_visits:
+        type: integer
+        format: int64
+        description: Visit count
+      n_visitors:
+        type: integer
+        format: int64
+        description: Visitor count
+  POS:
+    type: object
+    properties:
+      persistence_id:
+        type: string
+        description: Persistence identifier
+      establishment_id:
+        type: string
+        description: Establishment identifier
+      asset_created_date:
+        type: string
+        description: Asset creation date
+      created_at:
+        type: string
+        format: date-time
+        description: Record creation timestamp
+      turnover_current_month:
+        type: integer
+        format: int64
+        description: Current month turnover
+      turnover_week_1:
+        type: integer
+        format: int64
+        description: Week 1 turnover
+      turnover_week_2:
+        type: integer
+        format: int64
+        description: Week 2 turnover
+      turnover_week_3:
+        type: integer
+        format: int64
+        description: Week 3 turnover
+      turnover_week_4:
+        type: integer
+        format: int64
+        description: Week 4 turnover
+      turnover_percentage_change:
+        type: integer
+        format: int64
+        description: Turnover percentage change
+      completed_orders:
+        type: integer
+        format: int64
+        description: Completed order count
+      percentage_change:
+        type: integer
+        format: int64
+        description: Order percentage change
+      completed_orders_by_contact:
+        type: integer
+        format: int64
+        description: Completed orders via contact channel
+      completed_orders_by_card:
+        type: integer
+        format: int64
+        description: Completed orders via card
+      completed_orders_by_online:
+        type: integer
+        format: int64
+        description: Completed orders via online
+      completed_orders_by_account:
+        type: integer
+        format: int64
+        description: Completed orders billed to account
+      turnover_last_month:
+        type: integer
+        format: int64
+        description: Last month turnover
+      completed_orders_last_month:
+        type: integer
+        format: int64
+        description: Completed orders last month

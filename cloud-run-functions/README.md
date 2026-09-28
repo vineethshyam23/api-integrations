@@ -15,7 +15,7 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 ## Planned
 
 - Apigee proxy / product / KVM — only when `Documents/API` notes exist (do not invent)
-- Remaining unused OpenAPI twin / panel dashboard variant — only if still unique vs gateway patterns 03 / 11
+- Remaining unused CF handlers (e.g. GA dual-path `cloud_function_main.py`) — only if still unique vs patterns 04 / 07 / 08
 
 ## Rules
 
