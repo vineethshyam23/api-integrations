@@ -36,8 +36,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 13 | Inbound dual-route daily NTILE pagination | API Gateway | [`api-gateway/08-inbound-dual-route-daily-ntile/`](./api-gateway/08-inbound-dual-route-daily-ntile/) |
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | API Gateway | [`api-gateway/09-dual-scheme-gateway-auth-contract/`](./api-gateway/09-dual-scheme-gateway-auth-contract/) |
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | Cloud Run / Cloud Functions | [`cloud-run-functions/05-pos-daily-transactions-offset-limit/`](./cloud-run-functions/05-pos-daily-transactions-offset-limit/) |
+| 16 | Multi-route panel dashboard gateway twins | API Gateway | [`api-gateway/10-multi-route-panel-gateway-twins/`](./api-gateway/10-multi-route-panel-gateway-twins/) |
 
-**Count:** 15 patterns
+**Count:** 16 patterns
 
 ---
 
