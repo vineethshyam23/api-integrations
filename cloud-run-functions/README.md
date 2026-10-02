@@ -11,11 +11,12 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 | 03 | OIDC outbound HTTP client (paginated pull) | [`03-oidc-outbound-http-client/`](./03-oidc-outbound-http-client/) |
 | 04 | Env-scoped BigQuery pagination (DEPLOY_ENV) | [`04-env-scoped-bq-pagination/`](./04-env-scoped-bq-pagination/) |
 | 05 | POS daily-transactions offset/limit (SQL pushdown) | [`05-pos-daily-transactions-offset-limit/`](./05-pos-daily-transactions-offset-limit/) |
+| 06 | GA dual-path handler (route resolve + flat/nested BQ) | [`06-ga-dual-path-handler/`](./06-ga-dual-path-handler/) |
 
 ## Planned
 
 - Apigee proxy / product / KVM — only when `Documents/API` notes exist (do not invent)
-- Remaining unused CF handlers (e.g. GA dual-path `cloud_function_main.py`) — only if still unique vs patterns 04 / 07 / 08
+- Remaining unused CF / OpenAPI artifacts — only if still unique vs Done
 
 ## Rules
 

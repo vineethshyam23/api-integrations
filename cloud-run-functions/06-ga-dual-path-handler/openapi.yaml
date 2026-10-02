@@ -1,0 +1,225 @@
+swagger: "2.0"
+info:
+  description: >
+    Companion OpenAPI for the dual-path analytics Cloud Function.
+    Two gateway routes share one backend URI. The handler resolves which
+    query to run from forwarded path headers (and query-param fallbacks).
+  version: "1.0.0"
+  title: Analytics Dual-Path API
+schemes:
+  - https
+tags:
+  - name: analytics-data
+    description: Flat daily visits and nested GA session extracts
+paths:
+  /daily-visits:
+    get:
+      tags:
+        - analytics-data
+      summary: Paginated flat daily visits
+      operationId: dailyVisits
+      x-google-backend:
+        # Same backend URI as /ga-sessions-data — path suffix is for routing hints.
+        address: https://BACKEND_URL/daily-visits
+        deadline: 30.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          minimum: 1
+          default: 1
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+          required: false
+        - name: start_date
+          in: query
+          type: string
+          format: date
+          required: false
+          description: Inclusive lower bound (YYYY-MM-DD)
+        - name: end_date
+          in: query
+          type: string
+          format: date
+          required: false
+          description: Inclusive upper bound (YYYY-MM-DD)
+      responses:
+        "200":
+          description: Paginated flat daily visits
+          schema:
+            $ref: "#/definitions/PaginatedDailyVisits"
+        "400":
+          description: Invalid paging parameters
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: No rows for the requested filters
+        "500":
+          description: Backend error
+
+  /ga-sessions-data:
+    get:
+      tags:
+        - analytics-data
+      summary: Paginated nested GA sessions
+      operationId: gaSessionsData
+      x-google-backend:
+        address: https://BACKEND_URL/ga-sessions-data
+        # Nested STRUCT projection + public sample scans can run longer.
+        deadline: 60.0
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          minimum: 1
+          default: 1
+          required: false
+        - name: limit
+          in: query
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+          required: false
+        - name: date
+          in: query
+          type: string
+          pattern: "^\\d{8}$"
+          default: "20170801"
+          required: false
+          description: Table shard suffix YYYYMMDD
+        - name: country
+          in: query
+          type: string
+          required: false
+          description: geoNetwork.country exact match
+        - name: device_category
+          in: query
+          type: string
+          enum: [desktop, mobile, tablet]
+          required: false
+        - name: channel_grouping
+          in: query
+          type: string
+          required: false
+      responses:
+        "200":
+          description: Paginated nested GA sessions
+          schema:
+            $ref: "#/definitions/PaginatedGaSessions"
+        "400":
+          description: Invalid paging, date, or device_category
+        "403":
+          description: Missing or invalid API key
+        "404":
+          description: No sessions for the requested filters
+        "500":
+          description: Backend error
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: X-API-Key
+    in: header
+
+definitions:
+  Pagination:
+    type: object
+    properties:
+      page:
+        type: integer
+      limit:
+        type: integer
+      total_records:
+        type: integer
+      total_pages:
+        type: integer
+      has_next:
+        type: boolean
+      has_previous:
+        type: boolean
+
+  DailyVisit:
+    type: object
+    properties:
+      visit_date:
+        type: string
+        format: date
+      total_visits:
+        type: integer
+
+  PaginatedDailyVisits:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/DailyVisit"
+      pagination:
+        $ref: "#/definitions/Pagination"
+      filters_applied:
+        type: object
+      metadata:
+        type: object
+
+  GaSession:
+    type: object
+    description: Nested session shape — STRUCT fields for totals/device/traffic
+    properties:
+      visitId:
+        type: integer
+        format: int64
+      visitNumber:
+        type: integer
+      visitStartTime:
+        type: integer
+        format: int64
+      date:
+        type: string
+      fullVisitorId:
+        type: string
+      channelGrouping:
+        type: string
+      totals:
+        type: object
+      geoNetwork:
+        type: object
+      device:
+        type: object
+      trafficSource:
+        type: object
+      customDimensions:
+        type: array
+        items:
+          type: object
+      hits_sample:
+        type: array
+        items:
+          type: object
+
+  PaginatedGaSessions:
+    type: object
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/GaSession"
+      pagination:
+        $ref: "#/definitions/Pagination"
+      filters_applied:
+        type: object
+      metadata:
+        type: object
