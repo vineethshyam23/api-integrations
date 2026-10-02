@@ -37,8 +37,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | API Gateway | [`api-gateway/09-dual-scheme-gateway-auth-contract/`](./api-gateway/09-dual-scheme-gateway-auth-contract/) |
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | Cloud Run / Cloud Functions | [`cloud-run-functions/05-pos-daily-transactions-offset-limit/`](./cloud-run-functions/05-pos-daily-transactions-offset-limit/) |
 | 16 | Multi-route panel dashboard gateway twins | API Gateway | [`api-gateway/10-multi-route-panel-gateway-twins/`](./api-gateway/10-multi-route-panel-gateway-twins/) |
+| 17 | GA dual-path handler (route resolve + flat/nested BQ) | Cloud Run / Cloud Functions | [`cloud-run-functions/06-ga-dual-path-handler/`](./cloud-run-functions/06-ga-dual-path-handler/) |
 
-**Count:** 16 patterns
+**Count:** 17 patterns
 
 ---
 

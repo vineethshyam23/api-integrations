@@ -23,14 +23,15 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | https://github.com/vineethshyam23/api-integrations/pull/14 |
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | https://github.com/vineethshyam23/api-integrations/pull/15 |
 | 16 | Multi-route panel dashboard gateway twins | `api-gateway/10-multi-route-panel-gateway-twins/` | 2026-09-28 | https://github.com/vineethshyam23/api-integrations/pull/17 |
+| 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | (pending PR) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | POS establishment lookup OpenAPI | `api-gateway/11-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 |
-| 3 | GA dual-path Cloud Run handler | `cloud-run-functions/06-...` | `dev/cloud_function_main.py` — only if still unique vs gateway pattern 04 |
+| 2 | POS establishment lookup OpenAPI | `api-gateway/11-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 (single-route lookup; compare carefully) |
+| 3 | dish_pos_openapi_spec multi-version surface | `api-gateway/11-...` | `prd/dish_pos_openapi_spec.yml` — only if still unique vs patterns 03 / 16 |
 
 ## Out of scope here
 
@@ -56,3 +57,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-09-21: shipped Dual-scheme gateway auth contract (Bearer + API key) from `prd/medalia_integrated.yml` (handler already pattern 06). Focus: dual `securityDefinitions` (`ApiKeyHeader` + `BearerToken` OR list), Cloud Run path backends with h2, sanitized full schemas, `check-auth-contract.sh` against the Bearer→X-API-KEY naming pitfall. Distinct from pattern 06 (app-layer compare) and from the thin single-scheme stub in that folder. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else POS daily-transactions offset/limit CF or remaining unique panel twin.
 - 2026-09-25: shipped POS daily-transactions offset/limit CF from `prd/dish-panel-pos-gbq-v3.py` (contrast v2 in-memory slice). Focus: SQL LIMIT/OFFSET pushdown, parameterized `@establishment_id`, `ENV`→`BQ_PROJECT_ID`, hard limit cap, gated error detail, companion `/v3/getPOS` OpenAPI with `{records}` contract. Distinct from pattern 04 (DEPLOY_ENV country paging) and from gateway-only pattern 03/02. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else unused panel twin if still unique vs 03/11.
 - 2026-09-28: shipped multi-route panel dashboard gateway twins from `prd/hd-dish-panel-dashboard-gbq_v2.yml` + `dev/hd-dish-panel-dashboard-dev-gbq_v2.yml`. Focus: five-route twin pair, pairwise backend inequality gate, PRD region mix vs DEV consolidation, twin lag vs expanded `/v3` OpenAPI (pattern 03). Distinct from pattern 03 (single OpenAPI) and pattern 11 (single-route twin). Apigee still blocked without `Documents/API`. Next: Apigee if notes; else POS establishment lookup if unique vs 01, or GA dual-path handler from `cloud_function_main.py`.
+- 2026-10-02: shipped GA dual-path handler from `dev/cloud_function_main.py` (+ companion dual-route OpenAPI). Focus: multi-header path recovery (`X-Forwarded-Path` / `X-Envoy-Original-Path` / `X-Original-URI`), param fallback, parameterized BQ, flat vs nested envelopes, public-sample defaults with overrides. Distinct from gateway-only pattern 04 (`api-gateway/03-...`) and from single-route CF patterns 01/04/05. Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup for now (near-duplicate of pattern 01 single-route lookup). Next: Apigee if notes; else POS establishment lookup only if clearly unique; else `dish_pos_openapi_spec.yml` if unique vs 03/16.
