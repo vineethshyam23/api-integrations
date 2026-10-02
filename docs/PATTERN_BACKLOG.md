@@ -23,7 +23,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 14 | Dual-scheme gateway auth contract (Bearer + API key) | `api-gateway/09-dual-scheme-gateway-auth-contract/` | 2026-09-21 | https://github.com/vineethshyam23/api-integrations/pull/14 |
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | https://github.com/vineethshyam23/api-integrations/pull/15 |
 | 16 | Multi-route panel dashboard gateway twins | `api-gateway/10-multi-route-panel-gateway-twins/` | 2026-09-28 | https://github.com/vineethshyam23/api-integrations/pull/17 |
-| 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | (pending PR) |
+| 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
 
 ## Next candidates (not Done)
 
