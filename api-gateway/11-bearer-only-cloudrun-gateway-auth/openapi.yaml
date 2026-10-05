@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  title: "CX user lookup API — Bearer-only gateway auth"
+  description: >-
+    API Gateway OpenAPI for a single-route CX user lookup fronting Cloud Run.
+    Declares one correctly mapped BearerToken scheme (Authorization header).
+    Contrast with the dual-scheme vendor lookup pattern when clients need both
+    X-API-KEY and Bearer. Pair with an app-layer shared-secret check on the
+    service; gateway auth alone is not enough if the Cloud Run URL leaks.
+  version: "1.0.0"
+
+schemes:
+  - "https"
+
+paths:
+  "/getUsers":
+    get:
+      tags:
+        - "Users"
+      summary: "Retrieve users by establishment_id"
+      description: >-
+        Returns user profile fields for a single establishment_id. Edge auth
+        is Authorization Bearer only (see securityDefinitions). Backend should
+        still validate the shared secret before querying the warehouse.
+      operationId: "getUsersByEstablishmentId"
+      x-google-backend:
+        address: "https://BACKEND_URL/getUsers"
+        protocol: "h2"
+      security:
+        - BearerToken: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "establishment_id"
+          in: "query"
+          description: "Establishment identifier"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Users"
+        "400":
+          description: "Bad request — missing or invalid establishment_id"
+        "401":
+          description: "Unauthorized — Bearer token missing or invalid"
+        "403":
+          description: "Forbidden — insufficient permissions"
+        "404":
+          description: "Not found — establishment has no users"
+        "500":
+          description: "Internal server error"
+
+securityDefinitions:
+  BearerToken:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >-
+      Send the shared secret with the Bearer prefix, e.g.
+      "Authorization: Bearer YOUR_API_KEY". Scheme name and header name must
+      both describe Authorization — do not map a scheme named Bearer to
+      X-API-KEY.
+
+definitions:
+  Users:
+    type: "object"
+    properties:
+      account_id:
+        type: "string"
+        description: "User account identifier"
+        example: "ACCOUNT_ID"
+      email:
+        type: "string"
+        format: "email"
+        description: "Primary email (PII — scope fields carefully in production)"
+        example: "user@example.com"
+      first_name:
+        type: "string"
+        description: "Given name"
+        example: "FIRST_NAME"
+      last_name:
+        type: "string"
+        description: "Family name"
+        example: "LAST_NAME"
+      mobilephone:
+        type: "string"
+        description: "Mobile number (PII — prefer E.164 placeholders only in docs)"
+        example: "+10000000000"
+      salutation:
+        type: "string"
+        description: "Preferred salutation"
+        example: "Ms"
+        enum: ["Mr", "Ms", "Mrs", "Dr", "Prof"]

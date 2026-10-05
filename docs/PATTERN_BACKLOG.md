@@ -24,14 +24,15 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | https://github.com/vineethshyam23/api-integrations/pull/15 |
 | 16 | Multi-route panel dashboard gateway twins | `api-gateway/10-multi-route-panel-gateway-twins/` | 2026-09-28 | https://github.com/vineethshyam23/api-integrations/pull/17 |
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
+| 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | (pending PR) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | POS establishment lookup OpenAPI | `api-gateway/11-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 (single-route lookup; compare carefully) |
-| 3 | dish_pos_openapi_spec multi-version surface | `api-gateway/11-...` | `prd/dish_pos_openapi_spec.yml` — only if still unique vs patterns 03 / 16 |
+| 2 | POS establishment lookup OpenAPI | `api-gateway/12-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 (single-route lookup; compare carefully) |
+| 3 | Multi-route path-security lint (securityDefinitions without path security) | `api-gateway/12-...` | `dev/hd-dish-panel-dashboard-dev-gbq.yml` — only if still unique vs twin security-drop lesson in pattern 11 |
 
 ## Out of scope here
 
@@ -58,3 +59,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-09-25: shipped POS daily-transactions offset/limit CF from `prd/dish-panel-pos-gbq-v3.py` (contrast v2 in-memory slice). Focus: SQL LIMIT/OFFSET pushdown, parameterized `@establishment_id`, `ENV`→`BQ_PROJECT_ID`, hard limit cap, gated error detail, companion `/v3/getPOS` OpenAPI with `{records}` contract. Distinct from pattern 04 (DEPLOY_ENV country paging) and from gateway-only pattern 03/02. Apigee still blocked without `Documents/API`. Next: Apigee if notes; else unused panel twin if still unique vs 03/11.
 - 2026-09-28: shipped multi-route panel dashboard gateway twins from `prd/hd-dish-panel-dashboard-gbq_v2.yml` + `dev/hd-dish-panel-dashboard-dev-gbq_v2.yml`. Focus: five-route twin pair, pairwise backend inequality gate, PRD region mix vs DEV consolidation, twin lag vs expanded `/v3` OpenAPI (pattern 03). Distinct from pattern 03 (single OpenAPI) and pattern 11 (single-route twin). Apigee still blocked without `Documents/API`. Next: Apigee if notes; else POS establishment lookup if unique vs 01, or GA dual-path handler from `cloud_function_main.py`.
 - 2026-10-02: shipped GA dual-path handler from `dev/cloud_function_main.py` (+ companion dual-route OpenAPI). Focus: multi-header path recovery (`X-Forwarded-Path` / `X-Envoy-Original-Path` / `X-Original-URI`), param fallback, parameterized BQ, flat vs nested envelopes, public-sample defaults with overrides. Distinct from gateway-only pattern 04 (`api-gateway/03-...`) and from single-route CF patterns 01/04/05. Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup for now (near-duplicate of pattern 01 single-route lookup). Next: Apigee if notes; else POS establishment lookup only if clearly unique; else `dish_pos_openapi_spec.yml` if unique vs 03/16.
+- 2026-10-05: shipped Bearer-only Cloud Run gateway auth from `prd/medallia.yml`. Focus: single-route `/getUsers`, `BearerToken` → `Authorization` (not X-API-KEY), `protocol: h2` path backend, `check-bearer-contract.sh` against dual-scheme drift and the Bearer→X-API-KEY pitfall. Distinct from dual-scheme pattern 14 and from API-key-only gateway patterns. Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup (still near-duplicate of pattern 01). Skipped `dish_pos_openapi_spec.yml` (already pattern 03 lineage). Next: Apigee if notes; else POS establishment only if clearly unique; else multi-route path-security lint from `hd-dish-panel-dashboard-dev-gbq.yml` if unique vs pattern 11.
