@@ -24,7 +24,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 15 | POS daily-transactions offset/limit (SQL pushdown) | `cloud-run-functions/05-pos-daily-transactions-offset-limit/` | 2026-09-25 | https://github.com/vineethshyam23/api-integrations/pull/15 |
 | 16 | Multi-route panel dashboard gateway twins | `api-gateway/10-multi-route-panel-gateway-twins/` | 2026-09-28 | https://github.com/vineethshyam23/api-integrations/pull/17 |
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
-| 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | (pending PR) |
+| 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | https://github.com/vineethshyam23/api-integrations/pull/21 |
 
 ## Next candidates (not Done)
 
