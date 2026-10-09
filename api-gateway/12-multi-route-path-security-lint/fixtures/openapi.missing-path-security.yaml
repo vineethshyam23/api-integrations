@@ -1,0 +1,95 @@
+# NEGATIVE FIXTURE — do not deploy.
+# Mirrors the production footgun: securityDefinitions present, no path-level
+# security: on any operation. check-path-security.sh must FAIL on this file.
+swagger: "2.0"
+info:
+  description: >-
+    Broken multi-route panel OpenAPI. Schemes are declared but never attached
+    to paths — API Gateway will not enforce the key.
+  version: "1.1.0"
+  title: Panel dashboard API (INSECURE — missing path security)
+tags:
+  - name: dashboard
+    description: Dashboard data
+schemes:
+  - https
+paths:
+  /getEstablishment:
+    get:
+      tags:
+        - dashboard
+      summary: Find establishment information by ID
+      operationId: getEstablishment
+      x-google-backend:
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel-establishment-dev-gbq
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+  /getVisits:
+    get:
+      tags:
+        - dashboard
+      summary: Find website visits by establishment ID
+      operationId: getVisits
+      x-google-backend:
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel-visits-dev-gbq
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+  /getOrders:
+    get:
+      tags:
+        - dashboard
+      summary: Find orders by establishment ID
+      operationId: getOrders
+      x-google-backend:
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel-orders-dev-gbq
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+  /getReservations:
+    get:
+      tags:
+        - dashboard
+      summary: Find reservations by establishment ID
+      operationId: getReservations
+      x-google-backend:
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel-reservations-dev-gbq
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+securityDefinitions:
+  # Looks configured. Without path-level security: below each operation,
+  # the gateway does not require the key.
+  api_key:
+    type: apiKey
+    name: X-API-KEY
+    in: header
