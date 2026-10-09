@@ -25,7 +25,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 16 | Multi-route panel dashboard gateway twins | `api-gateway/10-multi-route-panel-gateway-twins/` | 2026-09-28 | https://github.com/vineethshyam23/api-integrations/pull/17 |
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
 | 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | https://github.com/vineethshyam23/api-integrations/pull/21 |
-| 19 | Multi-route path-security lint | `api-gateway/12-multi-route-path-security-lint/` | 2026-10-09 | (pending PR) |
+| 19 | Multi-route path-security lint | `api-gateway/12-multi-route-path-security-lint/` | 2026-10-09 | https://github.com/vineethshyam23/api-integrations/pull/23 |
 
 ## Next candidates (not Done)
 
