@@ -17,12 +17,14 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 09 | Dual-scheme gateway auth contract (Bearer + API key) | [`09-dual-scheme-gateway-auth-contract/`](./09-dual-scheme-gateway-auth-contract/) |
 | 10 | Multi-route panel dashboard gateway twins | [`10-multi-route-panel-gateway-twins/`](./10-multi-route-panel-gateway-twins/) |
 | 11 | Bearer-only Cloud Run gateway auth | [`11-bearer-only-cloudrun-gateway-auth/`](./11-bearer-only-cloudrun-gateway-auth/) |
+| 12 | Multi-route path-security lint | [`12-multi-route-path-security-lint/`](./12-multi-route-path-security-lint/) |
 
 ## Planned
 
 - Apigee proxy / product / KVM when notes exist
 - POS establishment lookup OpenAPI — only if still unique vs pattern 01
-- Remaining unused multi-route security-drop / panel variants — only if still unique vs 03 / 11 / 16
+- Account-composition DE lookup handler — only if unique vs pattern 09
+- Tourism Bearer limit/offset OpenAPI — only if unique vs pattern 13
 
 ## Rules
 
