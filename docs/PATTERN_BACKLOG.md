@@ -26,15 +26,16 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
 | 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | https://github.com/vineethshyam23/api-integrations/pull/21 |
 | 19 | Multi-route path-security lint | `api-gateway/12-multi-route-path-security-lint/` | 2026-10-09 | https://github.com/vineethshyam23/api-integrations/pull/23 |
+| 20 | Account-composition DE lookup (compose + OR-union) | `cloud-run-functions/07-account-composition-de-lookup/` | 2026-10-12 | (pending PR) |
 
 ## Next candidates (not Done)
 
 | Priority | Pattern | Target folder | Source hint |
 |----------|---------|---------------|-------------|
 | 1 | Apigee proxy / product / KVM pattern (placeholders only) | `apigee/01-...` | Optional local `Documents/API` notes if present; else skip inventing — wait for notes |
-| 2 | POS establishment lookup OpenAPI | `api-gateway/13-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 (single-route lookup; compare carefully) |
-| 3 | Account-composition DE lookup handler | `cloud-run-functions/07-...` | `prd/dashboard_360_de_lookup.py` — metro+store → composed account id; only if distinct from pattern 09 filters |
-| 4 | Tourism Bearer limit/offset OpenAPI (thin companion) | `api-gateway/13-...` | `prd/tourismNrw.yml` — only if still unique vs pattern 13 ApiKeyAuth pageSize surface |
+| 2 | Tourism Bearer limit/offset OpenAPI (thin companion) | `api-gateway/13-...` | `prd/tourismNrw.yml` — only if still unique vs pattern 13 ApiKeyAuth / pattern 18 Bearer-only |
+| 3 | POS establishment lookup OpenAPI | `api-gateway/13-...` | `dev/POS_establishment_lookup_dev.yml` — only if still unique vs pattern 01 (single-route lookup; compare carefully) |
+| 4 | Panel dashboard OpenAPI variant (`hd-dish-panel-dashboard-new.yml`) | `api-gateway/13-...` | Only if still unique vs patterns 03 / 16 / 19 |
 
 ## Out of scope here
 
@@ -63,3 +64,4 @@ One pattern shipped per automation run. Do not duplicate Done items.
 - 2026-10-02: shipped GA dual-path handler from `dev/cloud_function_main.py` (+ companion dual-route OpenAPI). Focus: multi-header path recovery (`X-Forwarded-Path` / `X-Envoy-Original-Path` / `X-Original-URI`), param fallback, parameterized BQ, flat vs nested envelopes, public-sample defaults with overrides. Distinct from gateway-only pattern 04 (`api-gateway/03-...`) and from single-route CF patterns 01/04/05. Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup for now (near-duplicate of pattern 01 single-route lookup). Next: Apigee if notes; else POS establishment lookup only if clearly unique; else `dish_pos_openapi_spec.yml` if unique vs 03/16.
 - 2026-10-05: shipped Bearer-only Cloud Run gateway auth from `prd/medallia.yml`. Focus: single-route `/getUsers`, `BearerToken` → `Authorization` (not X-API-KEY), `protocol: h2` path backend, `check-bearer-contract.sh` against dual-scheme drift and the Bearer→X-API-KEY pitfall. Distinct from dual-scheme pattern 14 and from API-key-only gateway patterns. Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup (still near-duplicate of pattern 01). Skipped `dish_pos_openapi_spec.yml` (already pattern 03 lineage). Next: Apigee if notes; else POS establishment only if clearly unique; else multi-route path-security lint from `hd-dish-panel-dashboard-dev-gbq.yml` if unique vs pattern 11.
 - 2026-10-09: shipped multi-route path-security lint from `dev/hd-dish-panel-dashboard-dev-gbq.yml`. Focus: single-file gate when `securityDefinitions` exist but path-level `security:` is missing on multi-route panel OpenAPI; fixed exemplar with header `X-API-KEY`; negative fixture. Distinct from pattern 11 (twin compare) and pattern 16 (secured five-route twins). Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup (still near-duplicate of pattern 01). Next: Apigee if notes; else `dashboard_360_de_lookup.py` account-composition if unique vs 09; else thin tourism Bearer OpenAPI if unique vs 13.
+- 2026-10-12: shipped account-composition DE lookup from `prd/dashboard_360_de_lookup.py`. Focus: PREFIX+store+metro composition, zero-strip, OR-union match (metro+store / metro alone / UNNEST account ids), long-metro fallback, env-configurable prefix/widths, PII email dropped from response, companion `/account-activity` OpenAPI. Distinct from pattern 09 (pair-required AND filters, no composition). Skipped Apigee (no `Documents/API`). Skipped POS establishment lookup (still near-duplicate of pattern 01). Next: Apigee if notes; else tourism Bearer limit/offset OpenAPI if unique vs 13/18; else panel `hd-dish-panel-dashboard-new.yml` if unique vs 03/16/19.
