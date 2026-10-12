@@ -12,6 +12,7 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 | 04 | Env-scoped BigQuery pagination (DEPLOY_ENV) | [`04-env-scoped-bq-pagination/`](./04-env-scoped-bq-pagination/) |
 | 05 | POS daily-transactions offset/limit (SQL pushdown) | [`05-pos-daily-transactions-offset-limit/`](./05-pos-daily-transactions-offset-limit/) |
 | 06 | GA dual-path handler (route resolve + flat/nested BQ) | [`06-ga-dual-path-handler/`](./06-ga-dual-path-handler/) |
+| 07 | Account-composition DE lookup (compose + OR-union) | [`07-account-composition-de-lookup/`](./07-account-composition-de-lookup/) |
 
 ## Planned
 

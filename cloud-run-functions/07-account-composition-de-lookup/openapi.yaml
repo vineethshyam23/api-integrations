@@ -1,0 +1,148 @@
+swagger: "2.0"
+info:
+  title: Account-composition activity lookup API
+  description: >
+    Country-scoped account activity lookup. Fronted by API Gateway; backend is
+    an HTTP Cloud Function that composes account ids from prefix+store+metro,
+    OR-unions match strategies, and pages with SQL LIMIT/OFFSET.
+  version: "1.0.0"
+schemes:
+  - https
+tags:
+  - name: account-lookup
+    description: Dashboard / account activity reads
+paths:
+  /account-activity:
+    get:
+      tags:
+        - account-lookup
+      summary: Account activity by metro / composed account id
+      description: >
+        Returns a {records, count} envelope. Identity matching is an OR-union of
+        (metro+store), (metro alone), and composed / explicit metroAccountIdentifier
+        values. At least one of metroId or metroAccountIdentifier is required.
+      operationId: getAccountActivity
+      x-google-backend:
+        # Gen2 / Cloud Run URI for the account-composition-lookup function.
+        address: https://BACKEND_URL
+        protocol: h2
+        deadline: 45.0
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - name: metroId
+          in: query
+          description: >
+            Metro / customer numeric id (leading zeros stripped). May also carry
+            a full composed account id when longer than ACCOUNT_METRO_WIDTH.
+          required: false
+          type: string
+        - name: storeId
+          in: query
+          description: >
+            Store numeric id. When present with metroId, enables account-id
+            composition and paired metro+store matching.
+          required: false
+          type: string
+        - name: metroAccountIdentifier
+          in: query
+          description: Explicit warehouse account identifier (bypasses composition)
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: Rows to skip before collecting the result set
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: Max rows to return (hard cap 1000)
+          required: false
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/AccountActivityResponse"
+        "400":
+          description: Bad request — missing identity or invalid paging
+        "401":
+          description: Unauthorized — authentication missing or invalid
+        "403":
+          description: Forbidden — edge API key / invoker IAM
+        "404":
+          description: Establishment not found (empty page)
+        "405":
+          description: Method not allowed
+        "500":
+          description: Internal server error
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-Key
+    in: header
+    description: Edge API key. Prefer API & Services restrictions; never commit real values.
+definitions:
+  AccountActivityResponse:
+    type: object
+    required:
+      - records
+      - count
+    properties:
+      records:
+        type: array
+        description: Activity / lead rows for the matched account identity
+        items:
+          $ref: "#/definitions/AccountActivityRow"
+      count:
+        type: integer
+        description: Number of rows in this page
+  AccountActivityRow:
+    type: object
+    properties:
+      subject:
+        type: string
+      assigned_id:
+        type: string
+      description:
+        type: string
+      type:
+        type: string
+      created_date:
+        type: string
+        description: ISO date or timestamp string
+      sub_type:
+        type: string
+      event_topic:
+        type: string
+      is_closed:
+        type: boolean
+      name_id:
+        type: string
+      outcome:
+        type: string
+      activity_id:
+        type: string
+      start_date:
+        type: string
+      lead_account_id:
+        type: string
+      metro_account_identifier:
+        type: string
+      user_id:
+        type: string
+      profile_name:
+        type: string
+      won_status:
+        type: string
+      metro_id:
+        type: string
+      store_id:
+        type: string

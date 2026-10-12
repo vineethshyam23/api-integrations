@@ -40,8 +40,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | Cloud Run / Cloud Functions | [`cloud-run-functions/06-ga-dual-path-handler/`](./cloud-run-functions/06-ga-dual-path-handler/) |
 | 18 | Bearer-only Cloud Run gateway auth | API Gateway | [`api-gateway/11-bearer-only-cloudrun-gateway-auth/`](./api-gateway/11-bearer-only-cloudrun-gateway-auth/) |
 | 19 | Multi-route path-security lint | API Gateway | [`api-gateway/12-multi-route-path-security-lint/`](./api-gateway/12-multi-route-path-security-lint/) |
+| 20 | Account-composition DE lookup (compose + OR-union) | Cloud Run / Cloud Functions | [`cloud-run-functions/07-account-composition-de-lookup/`](./cloud-run-functions/07-account-composition-de-lookup/) |
 
-**Count:** 19 patterns
+**Count:** 20 patterns
 
 ---
 
