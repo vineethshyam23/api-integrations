@@ -26,7 +26,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 17 | GA dual-path handler (route resolve + flat/nested BQ) | `cloud-run-functions/06-ga-dual-path-handler/` | 2026-10-02 | https://github.com/vineethshyam23/api-integrations/pull/19 |
 | 18 | Bearer-only Cloud Run gateway auth | `api-gateway/11-bearer-only-cloudrun-gateway-auth/` | 2026-10-05 | https://github.com/vineethshyam23/api-integrations/pull/21 |
 | 19 | Multi-route path-security lint | `api-gateway/12-multi-route-path-security-lint/` | 2026-10-09 | https://github.com/vineethshyam23/api-integrations/pull/23 |
-| 20 | Account-composition DE lookup (compose + OR-union) | `cloud-run-functions/07-account-composition-de-lookup/` | 2026-10-12 | (pending PR) |
+| 20 | Account-composition DE lookup (compose + OR-union) | `cloud-run-functions/07-account-composition-de-lookup/` | 2026-10-12 | https://github.com/vineethshyam23/api-integrations/pull/25 |
 
 ## Next candidates (not Done)
 
