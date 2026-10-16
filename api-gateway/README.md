@@ -18,13 +18,13 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 10 | Multi-route panel dashboard gateway twins | [`10-multi-route-panel-gateway-twins/`](./10-multi-route-panel-gateway-twins/) |
 | 11 | Bearer-only Cloud Run gateway auth | [`11-bearer-only-cloudrun-gateway-auth/`](./11-bearer-only-cloudrun-gateway-auth/) |
 | 12 | Multi-route path-security lint | [`12-multi-route-path-security-lint/`](./12-multi-route-path-security-lint/) |
+| 13 | Tourism Bearer limit/offset OpenAPI | [`13-tourism-bearer-limit-offset-openapi/`](./13-tourism-bearer-limit-offset-openapi/) |
 
 ## Planned
 
 - Apigee proxy / product / KVM when notes exist
 - POS establishment lookup OpenAPI — only if still unique vs pattern 01
-- Account-composition DE lookup handler — only if unique vs pattern 09
-- Tourism Bearer limit/offset OpenAPI — only if unique vs pattern 13
+- Panel dashboard OpenAPI variant (`hd-dish-panel-dashboard-new.yml`) — only if unique vs 03 / 16 / 19
 
 ## Rules
 

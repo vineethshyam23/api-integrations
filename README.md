@@ -41,8 +41,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 18 | Bearer-only Cloud Run gateway auth | API Gateway | [`api-gateway/11-bearer-only-cloudrun-gateway-auth/`](./api-gateway/11-bearer-only-cloudrun-gateway-auth/) |
 | 19 | Multi-route path-security lint | API Gateway | [`api-gateway/12-multi-route-path-security-lint/`](./api-gateway/12-multi-route-path-security-lint/) |
 | 20 | Account-composition DE lookup (compose + OR-union) | Cloud Run / Cloud Functions | [`cloud-run-functions/07-account-composition-de-lookup/`](./cloud-run-functions/07-account-composition-de-lookup/) |
+| 21 | Tourism Bearer limit/offset OpenAPI | API Gateway | [`api-gateway/13-tourism-bearer-limit-offset-openapi/`](./api-gateway/13-tourism-bearer-limit-offset-openapi/) |
 
-**Count:** 20 patterns
+**Count:** 21 patterns
 
 ---
 
