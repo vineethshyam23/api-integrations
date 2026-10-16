@@ -1,0 +1,186 @@
+swagger: "2.0"
+info:
+  title: "Partner catalog API — Bearer-only limit/offset gateway"
+  description: >-
+    Thin API Gateway OpenAPI for a single-route establishment catalog fronting
+    Cloud Run. Edge auth is Authorization Bearer only. Pagination uses limit
+    and offset query params with a {records, pagination} envelope — the
+    companion to the dual-route ApiKeyAuth pageSize/pageNumber tourism feed
+    (pattern 13) and the Bearer-only non-paginated CX lookup (pattern 18).
+  version: "1.0.0"
+
+schemes:
+  - "https"
+
+paths:
+  "/catalog":
+    get:
+      tags:
+        - "Catalog"
+      summary: "Retrieve paginated establishment catalog"
+      description: >-
+        Returns a page of establishment records for a regional destination /
+        partner feed. Edge auth is Authorization Bearer only. Clients page with
+        limit + offset (defaults 1000 / 0). Prefer SQL LIMIT/OFFSET pushdown on
+        the backend; this OpenAPI only documents the contract.
+      operationId: "getPartnerCatalog"
+      x-google-backend:
+        address: "https://BACKEND_URL/catalog"
+        protocol: "h2"
+      security:
+        - BearerToken: []
+      produces:
+        - "application/json"
+      parameters:
+        - name: "limit"
+          in: "query"
+          description: "Maximum number of records to return (cap in the handler)"
+          required: false
+          type: "integer"
+          default: 1000
+          minimum: 1
+        - name: "offset"
+          in: "query"
+          description: "Number of records to skip before collecting the page"
+          required: false
+          type: "integer"
+          default: 0
+          minimum: 0
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/EstablishmentList"
+        "400":
+          description: "Bad request — invalid limit or offset"
+        "401":
+          description: "Unauthorized — Bearer token missing or invalid"
+        "404":
+          description: "Not found — no establishment data for this page"
+        "405":
+          description: "Method not allowed"
+        "500":
+          description: "Internal server error"
+
+securityDefinitions:
+  BearerToken:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >-
+      Send the shared secret with the Bearer prefix, e.g.
+      "Authorization: Bearer YOUR_API_KEY". Scheme name and header name must
+      both describe Authorization — do not map a scheme named Bearer to
+      X-API-KEY.
+
+definitions:
+  EstablishmentList:
+    type: "object"
+    properties:
+      records:
+        type: "array"
+        items:
+          $ref: "#/definitions/Establishment"
+      pagination:
+        type: "object"
+        properties:
+          total:
+            type: "integer"
+            description: "Total number of records available"
+            example: 5000
+          limit:
+            type: "integer"
+            description: "Maximum number of records returned in this page"
+            example: 1000
+          offset:
+            type: "integer"
+            description: "Number of records skipped"
+            example: 0
+
+  Establishment:
+    type: "object"
+    properties:
+      establishment_id:
+        type: "string"
+        description: "Stable establishment identifier"
+        example: "EST_ID"
+      establishment_name:
+        type: "string"
+        description: "Display name"
+        example: "ESTABLISHMENT_NAME"
+      establishment_type:
+        type: "string"
+        description: "Establishment type category"
+        example: "restaurant"
+      cuisine_type:
+        type: "string"
+        description: "Cuisine labels (comma-separated when multi-value)"
+        example: "asian"
+      country:
+        type: "string"
+        description: "Country name"
+        example: "Germany"
+      street:
+        type: "string"
+        description: "Street address"
+        example: "STREET"
+      city:
+        type: "string"
+        description: "City"
+        example: "CITY"
+      postal_code:
+        type: "string"
+        description: "Postal code"
+        example: "00000"
+      latitude:
+        type: "number"
+        format: "float"
+        description: "Latitude"
+        example: 0.0
+      longitude:
+        type: "number"
+        format: "float"
+        description: "Longitude"
+        example: 0.0
+      places_legacy_id:
+        type: "string"
+        description: "Legacy places identifier kept during partner transition"
+        example: "PLACES_LEGACY_ID"
+      partner_ref_id:
+        type: "string"
+        description: "Partner-side reference identifier"
+        example: "PARTNER_REF_ID"
+      has_online_order:
+        type: "integer"
+        description: "Online ordering available (1=yes, 0=no)"
+        example: 1
+      has_online_reservation:
+        type: "integer"
+        description: "Online reservation available (1=yes, 0=no)"
+        example: 0
+      has_delivery:
+        type: "integer"
+        description: "Delivery available (1=yes, 0=no)"
+        example: 1
+      price_range:
+        type: "string"
+        description: "Price range category"
+        example: "low"
+      rating:
+        type: "string"
+        description: "Aggregate rating as stored in the warehouse"
+        example: "4.0"
+      website:
+        type: "string"
+        format: "uri"
+        description: "Public website URL"
+        example: "https://example.com"
+      menu_url:
+        type: "string"
+        format: "uri"
+        description: "Menu URL when present"
+        example: "https://example.com/menu"
+      open_hours:
+        type: "string"
+        description: "Opening hours text blob"
+        example: "Mon–Sun 11:00–22:00"
