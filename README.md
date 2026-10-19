@@ -42,8 +42,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 19 | Multi-route path-security lint | API Gateway | [`api-gateway/12-multi-route-path-security-lint/`](./api-gateway/12-multi-route-path-security-lint/) |
 | 20 | Account-composition DE lookup (compose + OR-union) | Cloud Run / Cloud Functions | [`cloud-run-functions/07-account-composition-de-lookup/`](./cloud-run-functions/07-account-composition-de-lookup/) |
 | 21 | Tourism Bearer limit/offset OpenAPI | API Gateway | [`api-gateway/13-tourism-bearer-limit-offset-openapi/`](./api-gateway/13-tourism-bearer-limit-offset-openapi/) |
+| 22 | POS KPI in-memory slice pagination (legacy) | Cloud Run / Cloud Functions | [`cloud-run-functions/08-pos-inmemory-slice-pagination/`](./cloud-run-functions/08-pos-inmemory-slice-pagination/) |
 
-**Count:** 21 patterns
+**Count:** 22 patterns
 
 ---
 
