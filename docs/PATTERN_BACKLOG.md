@@ -28,7 +28,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 19 | Multi-route path-security lint | `api-gateway/12-multi-route-path-security-lint/` | 2026-10-09 | https://github.com/vineethshyam23/api-integrations/pull/23 |
 | 20 | Account-composition DE lookup (compose + OR-union) | `cloud-run-functions/07-account-composition-de-lookup/` | 2026-10-12 | https://github.com/vineethshyam23/api-integrations/pull/25 |
 | 21 | Tourism Bearer limit/offset OpenAPI | `api-gateway/13-tourism-bearer-limit-offset-openapi/` | 2026-10-16 | https://github.com/vineethshyam23/api-integrations/pull/27 |
-| 22 | POS KPI in-memory slice pagination (legacy) | `cloud-run-functions/08-pos-inmemory-slice-pagination/` | 2026-10-19 | (PR pending) |
+| 22 | POS KPI in-memory slice pagination (legacy) | `cloud-run-functions/08-pos-inmemory-slice-pagination/` | 2026-10-19 | https://github.com/vineethshyam23/api-integrations/pull/29 |
 
 ## Next candidates (not Done)
 
