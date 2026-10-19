@@ -1,0 +1,163 @@
+swagger: "2.0"
+info:
+  title: POS KPI API (v2 legacy — in-memory slice)
+  description: >
+    Legacy establishment-scoped POS KPI rows. Fronted by API Gateway; backend
+    is an HTTP Cloud Function that applies LIMIT in BigQuery and then slices
+    offset/limit in process memory. Prefer the v3 SQL pushdown pattern for
+    new clients. Kept here so /v2/getPOS can stay live during migration.
+  version: "1.0.0"
+schemes:
+  - https
+tags:
+  - name: dashboard
+    description: Panel / dashboard POS reads (legacy)
+paths:
+  /v2/getPOS:
+    get:
+      tags:
+        - dashboard
+      summary: POS KPIs (v2 legacy schema)
+      description: >
+        Returns a {records} envelope for one establishment. Pagination is
+        applied in Python after a BigQuery LIMIT — do not copy this for new
+        services. Retire this route after clients move to /v3/getPOS.
+      operationId: getPosV2Legacy
+      x-google-backend:
+        # Gen1/Gen2 HTTPS URL for the panel-pos-v2 function.
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel-pos-v2
+        deadline: 45.0
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: Establishment identifier
+          required: true
+          type: string
+        - name: startDate
+          in: query
+          description: >
+            Accepted for contract compatibility. Legacy handler does not
+            apply this filter (left unused in source).
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: >
+            Accepted for contract compatibility. Legacy handler does not
+            apply this filter (left unused in source).
+          required: false
+          type: string
+        - name: offset
+          in: query
+          description: Rows to skip in process memory after the warehouse LIMIT
+          required: false
+          type: integer
+          minimum: 0
+          default: 0
+        - name: limit
+          in: query
+          description: >
+            Max rows to return. Legacy default was 9999 so in-memory paging
+            appeared to work — that is part of the anti-pattern.
+          required: false
+          type: integer
+          minimum: 1
+          default: 9999
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/PosKpiV2Response"
+        "400":
+          description: Bad request — missing establishmentId or invalid paging
+        "403":
+          description: Forbidden — edge API key / method not allowed
+        "404":
+          description: Establishment not found (empty page or collapsed errors)
+        "500":
+          description: Internal server error (rarely surfaced by this legacy body)
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-Key
+    in: header
+    description: Edge API key. Prefer API & Services restrictions; never commit real values.
+definitions:
+  PosKpiV2Response:
+    type: object
+    required:
+      - records
+    properties:
+      records:
+        type: array
+        description: Aggregated POS KPI rows for the establishment
+        items:
+          $ref: "#/definitions/PosKpiV2"
+  PosKpiV2:
+    type: object
+    description: Aggregated POS KPI row (legacy shape)
+    properties:
+      persistence_id:
+        type: string
+      establishment_id:
+        type: string
+      asset_created_date:
+        type: string
+      created_at:
+        type: string
+      turnover_current_month:
+        type: integer
+        format: int64
+      turnover_week_1:
+        type: integer
+        format: int64
+      turnover_week_2:
+        type: integer
+        format: int64
+      turnover_week_3:
+        type: integer
+        format: int64
+      turnover_week_4:
+        type: integer
+        format: int64
+      turnover_percentage_change:
+        type: integer
+        format: int64
+      completed_orders:
+        type: integer
+        format: int64
+      percentage_change:
+        type: integer
+        format: int64
+      completed_orders_by_contact:
+        type: integer
+        format: int64
+      completed_orders_by_card:
+        type: integer
+        format: int64
+      completed_orders_by_online:
+        type: integer
+        format: int64
+      completed_orders_by_invoice:
+        type: integer
+        format: int64
+      turnover_last_month:
+        type: integer
+        format: int64
+      completed_orders_last_month:
+        type: integer
+        format: int64
+  ErrorResponse:
+    type: object
+    required:
+      - error
+      - description
+    properties:
+      error:
+        type: integer
+      description:
+        type: string

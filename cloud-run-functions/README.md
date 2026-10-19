@@ -13,6 +13,7 @@ Patterns for HTTP and event-driven services used behind API Gateway or Apigee.
 | 05 | POS daily-transactions offset/limit (SQL pushdown) | [`05-pos-daily-transactions-offset-limit/`](./05-pos-daily-transactions-offset-limit/) |
 | 06 | GA dual-path handler (route resolve + flat/nested BQ) | [`06-ga-dual-path-handler/`](./06-ga-dual-path-handler/) |
 | 07 | Account-composition DE lookup (compose + OR-union) | [`07-account-composition-de-lookup/`](./07-account-composition-de-lookup/) |
+| 08 | POS KPI in-memory slice pagination (legacy / anti-pattern) | [`08-pos-inmemory-slice-pagination/`](./08-pos-inmemory-slice-pagination/) |
 
 ## Planned
 
