@@ -19,6 +19,7 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 11 | Bearer-only Cloud Run gateway auth | [`11-bearer-only-cloudrun-gateway-auth/`](./11-bearer-only-cloudrun-gateway-auth/) |
 | 12 | Multi-route path-security lint | [`12-multi-route-path-security-lint/`](./12-multi-route-path-security-lint/) |
 | 13 | Tourism Bearer limit/offset OpenAPI | [`13-tourism-bearer-limit-offset-openapi/`](./13-tourism-bearer-limit-offset-openapi/) |
+| 14 | Twin schema fidelity gate (typed records vs foreign `$ref`) | [`14-twin-schema-fidelity-gate/`](./14-twin-schema-fidelity-gate/) |
 
 ## Planned
 

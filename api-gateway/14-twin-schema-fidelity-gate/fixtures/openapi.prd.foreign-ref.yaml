@@ -1,0 +1,112 @@
+# Negative fixture — DO NOT deploy.
+# Reproduces the production footgun: PRD twin copied another product's
+# response $ref name, left records untyped (additionalProperties: true),
+# and added an extra 403 status the DEV twin does not declare.
+# check-schema-fidelity.sh --self must FAIL against this file.
+swagger: "2.0"
+info:
+  title: Market potential extract API (PRD — foreign-ref footgun)
+  description: Negative fixture for schema-fidelity gate self-test.
+  version: "1.0.0"
+schemes:
+  - https
+tags:
+  - name: market-potential
+    description: Country-scoped market potential rows
+paths:
+  /getMarketPotentialData:
+    get:
+      tags:
+        - market-potential
+      summary: Retrieve paginated market potential data
+      description: Returns records + pagination for one ISO country code.
+      operationId: getMarketPotentialData
+      x-google-backend:
+        address: https://BACKEND_URL/getMarketPotentialData
+        protocol: h2
+        deadline: 60.0
+      security:
+        - ApiKeyAuth: []
+      produces:
+        - application/json
+      parameters:
+        - name: countryCode
+          in: query
+          required: true
+          type: string
+          enum: [DE, FR, ES, IT]
+        - name: pageSize
+          in: query
+          required: false
+          type: integer
+          default: 100
+          minimum: 1
+          maximum: 10000
+        - name: pageNumber
+          in: query
+          required: false
+          type: integer
+          default: 1
+          minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            # Foreign product name — must not ship next to a typed twin.
+            $ref: "#/definitions/OtherProductDataResponse"
+        "400":
+          description: Bad request — invalid parameter value
+        "401":
+          description: Unauthorized — authentication missing or invalid
+        "403":
+          description: Forbidden — present only on this broken PRD twin
+        "404":
+          description: Not found — no data for page / country
+        "405":
+          description: Method not allowed
+        "500":
+          description: Internal server error
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-KEY
+    in: header
+definitions:
+  OtherProductDataResponse:
+    type: object
+    required:
+      - records
+      - pagination
+    properties:
+      records:
+        type: array
+        description: Untyped bag — generators cannot bind fields
+        items:
+          type: object
+          additionalProperties: true
+      pagination:
+        type: object
+        required:
+          - total
+          - pageSize
+          - pageNumber
+          - totalPages
+        properties:
+          total:
+            type: integer
+          pageSize:
+            type: integer
+          pageNumber:
+            type: integer
+          totalPages:
+            type: integer
+  ErrorResponse:
+    type: object
+    required:
+      - error
+      - description
+    properties:
+      error:
+        type: integer
+      description:
+        type: string

@@ -43,8 +43,9 @@ All examples are sanitized. No real project IDs, API keys, or customer endpoints
 | 20 | Account-composition DE lookup (compose + OR-union) | Cloud Run / Cloud Functions | [`cloud-run-functions/07-account-composition-de-lookup/`](./cloud-run-functions/07-account-composition-de-lookup/) |
 | 21 | Tourism Bearer limit/offset OpenAPI | API Gateway | [`api-gateway/13-tourism-bearer-limit-offset-openapi/`](./api-gateway/13-tourism-bearer-limit-offset-openapi/) |
 | 22 | POS KPI in-memory slice pagination (legacy) | Cloud Run / Cloud Functions | [`cloud-run-functions/08-pos-inmemory-slice-pagination/`](./cloud-run-functions/08-pos-inmemory-slice-pagination/) |
+| 23 | Twin schema fidelity gate (typed records vs foreign `$ref`) | API Gateway | [`api-gateway/14-twin-schema-fidelity-gate/`](./api-gateway/14-twin-schema-fidelity-gate/) |
 
-**Count:** 22 patterns
+**Count:** 23 patterns
 
 ---
 
