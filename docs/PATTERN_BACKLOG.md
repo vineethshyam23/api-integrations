@@ -30,7 +30,7 @@ One pattern shipped per automation run. Do not duplicate Done items.
 | 21 | Tourism Bearer limit/offset OpenAPI | `api-gateway/13-tourism-bearer-limit-offset-openapi/` | 2026-10-16 | https://github.com/vineethshyam23/api-integrations/pull/27 |
 | 22 | POS KPI in-memory slice pagination (legacy) | `cloud-run-functions/08-pos-inmemory-slice-pagination/` | 2026-10-19 | https://github.com/vineethshyam23/api-integrations/pull/29 |
 | 23 | Twin schema fidelity gate (typed records vs foreign `$ref`) | `api-gateway/14-twin-schema-fidelity-gate/` | 2026-10-23 | https://github.com/vineethshyam23/api-integrations/pull/31 |
-| 24 | Mixed backend generation lint (family / separator / `-gbq` parity) | `api-gateway/15-mixed-backend-generation-lint/` | 2026-10-26 | (pending PR) |
+| 24 | Mixed backend generation lint (family / separator / `-gbq` parity) | `api-gateway/15-mixed-backend-generation-lint/` | 2026-10-26 | https://github.com/vineethshyam23/api-integrations/pull/33 |
 
 ## Next candidates (not Done)
 
