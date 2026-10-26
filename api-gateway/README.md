@@ -20,12 +20,13 @@ Patterns for Google Cloud API Gateway in front of Cloud Run / Cloud Functions.
 | 12 | Multi-route path-security lint | [`12-multi-route-path-security-lint/`](./12-multi-route-path-security-lint/) |
 | 13 | Tourism Bearer limit/offset OpenAPI | [`13-tourism-bearer-limit-offset-openapi/`](./13-tourism-bearer-limit-offset-openapi/) |
 | 14 | Twin schema fidelity gate (typed records vs foreign `$ref`) | [`14-twin-schema-fidelity-gate/`](./14-twin-schema-fidelity-gate/) |
+| 15 | Mixed backend generation lint (family / separator / `-gbq`) | [`15-mixed-backend-generation-lint/`](./15-mixed-backend-generation-lint/) |
 
 ## Planned
 
 - Apigee proxy / product / KVM when notes exist
 - POS establishment lookup OpenAPI — only if still unique vs pattern 01
-- Panel dashboard OpenAPI variant (`hd-dish-panel-dashboard-new.yml`) — only if unique vs 03 / 16 / 19
+- Dana / menu-eng DEV legacy handlers — only if distinct from patterns 09 / 10 / 22
 
 ## Rules
 

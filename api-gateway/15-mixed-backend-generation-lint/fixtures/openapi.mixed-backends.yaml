@@ -1,0 +1,180 @@
+swagger: "2.0"
+info:
+  description: >-
+    NEGATIVE FIXTURE — do not deploy. Preserves the mixed-backend shape:
+    legacy name without -gbq, a foreign lookup-* family on visits, and
+    -gbq on orders/reservations. check-backend-generation.sh must FAIL.
+  version: "1.1.0"
+  title: Panel dashboard API (mixed backends — fixture)
+tags:
+  - name: dashboard
+    description: Dashboard data
+schemes:
+  - https
+paths:
+  /getEstablishment:
+    get:
+      tags:
+        - dashboard
+      summary: Find establishment information by ID
+      description: Returns information about a single establishment
+      operationId: getEstablishment
+      x-google-backend:
+        # Legacy name: panel_* underscore style, no -gbq generation suffix
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel_establishment
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: ID of the establishment to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Establishment"
+        "400":
+          description: Invalid establishment id provided
+        "403":
+          description: Method not allowed
+        "404":
+          description: Establishment not found
+  /getVisits:
+    get:
+      tags:
+        - dashboard
+      summary: Find website visits by establishment ID
+      description: Returns list of website visits
+      operationId: getVisits
+      x-google-backend:
+        # Foreign family: lookup-* instead of panel-*, hyphen separator
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/lookup-getvisits
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: ID of the establishment to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Visits"
+        "400":
+          description: Invalid establishment id provided
+        "403":
+          description: Method not allowed
+        "404":
+          description: Establishment not found
+  /getOrders:
+    get:
+      tags:
+        - dashboard
+      summary: Find orders by establishment ID
+      description: Returns list of orders
+      operationId: getOrders
+      x-google-backend:
+        # Partial migration: -gbq present, underscore style
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel_orders-gbq
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: ID of the establishment to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Orders"
+        "400":
+          description: Invalid establishment id provided
+        "403":
+          description: Method not allowed
+        "404":
+          description: Establishment not found
+  /getReservations:
+    get:
+      tags:
+        - dashboard
+      summary: Find reservations by establishment ID
+      description: Returns list of reservations
+      operationId: getReservations
+      x-google-backend:
+        address: https://REGION-PROJECT_ID.cloudfunctions.net/panel_reservations-gbq
+      security:
+        - api_key: []
+      produces:
+        - application/json
+      parameters:
+        - name: establishmentId
+          in: query
+          description: ID of the establishment to return
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Reservation"
+        "400":
+          description: Invalid establishment id provided
+        "403":
+          description: Method not allowed
+        "404":
+          description: Establishment not found
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: key
+    in: query
+definitions:
+  Establishment:
+    type: object
+    properties:
+      customerId:
+        type: string
+      account_id:
+        type: string
+  Orders:
+    type: object
+    properties:
+      account_id:
+        type: string
+      order_id:
+        type: integer
+        format: int64
+  Reservation:
+    type: object
+    properties:
+      reservation_id:
+        type: integer
+        format: int64
+      account_id:
+        type: string
+  Visits:
+    type: object
+    properties:
+      account_id:
+        type: string
+      visit_date:
+        type: string
+        format: date
